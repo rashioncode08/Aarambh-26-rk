@@ -25,7 +25,7 @@ export default function EventManagement() {
 
   useEffect(() => {
     const unsub = onSnapshot(query(collection(db, 'events')), (snap) => {
-      let evts = snap.docs.map(d => ({ id: d.id, ...(d.data() as any) }));
+      let evts: any[] = snap.docs.map(d => ({ id: d.id, ...(d.data() as any) }));
       evts.sort((a, b) => {
         const dateA = a.date instanceof Timestamp ? a.date.toMillis() : new Date(a.date).getTime();
         const dateB = b.date instanceof Timestamp ? b.date.toMillis() : new Date(b.date).getTime();

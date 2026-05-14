@@ -1,10 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ShieldCheck, PieChart, Users } from 'lucide-react';
+import { ArrowRight, ShieldCheck, PieChart, Users, Lock, Unlock } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { RegistrationModal } from '@/components/RegistrationModal';
 
 interface TimeLeft {
   days: number;
@@ -15,8 +16,18 @@ interface TimeLeft {
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, mins: 0, secs: 0 });
+  const [isRegModalOpen, setIsRegModalOpen] = useState(false);
+  const [hasRegistered, setHasRegistered] = useState(false);
 
   useEffect(() => {
+    // Check if user has already registered in this session
+    if (typeof window !== 'undefined') {
+      const regStatus = localStorage.getItem('aarambh_registered');
+      if (regStatus === 'true') {
+        setHasRegistered(true);
+      }
+    }
+
     const targetDate = new Date('2026-03-15T09:00:00').getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
@@ -36,6 +47,13 @@ export default function Home() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleRegistrationSuccess = () => {
+    setHasRegistered(true);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('aarambh_registered', 'true');
+    }
+  };
 
   return (
     <main className="flex flex-col items-center">
@@ -68,9 +86,16 @@ export default function Home() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <Button className="flex items-center gap-2">
-              Register Now <ArrowRight size={20} />
-            </Button>
+            {!hasRegistered ? (
+              <Button onClick={() => setIsRegModalOpen(true)} className="flex items-center gap-2">
+                Register Now <ArrowRight size={20} />
+              </Button>
+            ) : (
+              <div className="bg-green-500/20 text-green-400 border border-green-500/50 px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+                <ShieldCheck size={20} /> You are Registered!
+              </div>
+            )}
+            
             <Link href="/check-in">
               <Button variant="glass" className="flex items-center gap-2">
                 Volunteer Access
@@ -110,6 +135,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Locked Content Area */}
+      <section className="py-20 px-4 w-full max-w-7xl relative">
+        <h2 className="text-3xl font-bold mb-12 text-center uppercase tracking-widest text-white flex items-center justify-center gap-3">
+          {hasRegistered ? <Unlock className="text-green-500" /> : <Lock className="text-gray-500" />} 
+          Exclusive Student Content
+        </h2>
+        
+        {!hasRegistered ? (
+          <Card className="p-12 text-center flex flex-col items-center justify-center border-dashed border-admin-border/50 bg-black/20 relative overflow-hidden backdrop-blur-sm">
+            <Lock size={64} className="text-gray-600 mb-6" />
+            <h3 className="text-2xl font-bold text-gray-400 mb-4">Content Locked</h3>
+            <p className="text-gray-500 max-w-md">Register for Aarambh'26 to unlock exclusive event schedules, speaker details, and access to the student community discord.</p>
+            <Button onClick={() => setIsRegModalOpen(true)} className="mt-8">Register to Unlock</Button>
+          </Card>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+          >
+            <Card className="p-8 border-green-500/20 bg-green-500/5">
+              <h3 className="text-2xl font-bold text-white mb-4">Student Community</h3>
+              <p className="text-gray-400 mb-6">Join your cohort's WhatsApp and Discord groups to start networking!</p>
+              <Button variant="glass" className="w-full text-green-400 border-green-500/30">Join Discord Server</Button>
+            </Card>
+            <Card className="p-8 border-primary/20 bg-primary/5">
+              <h3 className="text-2xl font-bold text-white mb-4">Event Schedule</h3>
+              <p className="text-gray-400 mb-6">View your personalized itinerary based on your cohort assignment.</p>
+              <Button variant="glass" className="w-full text-primary border-primary/30">Download Schedule PDF</Button>
+            </Card>
+          </motion.div>
+        )}
+      </section>
+
       {/* Lead Capture Form */}
       <section className="py-32 px-6 w-full max-w-5xl pb-60">
         <Card className="p-12 text-center relative overflow-hidden">
@@ -129,6 +188,13 @@ export default function Home() {
           </form>
         </Card>
       </section>
+
+      {/* Registration Modal */}
+      <RegistrationModal 
+        isOpen={isRegModalOpen} 
+        onClose={() => setIsRegModalOpen(false)} 
+        onSuccess={handleRegistrationSuccess}
+      />
     </main>
   );
 }

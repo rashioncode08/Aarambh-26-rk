@@ -6,11 +6,7 @@ import { db } from '../../../lib/firebase';
 import { SkeletonCard, SkeletonTable } from '../../../components/admin/SkeletonLoader';
 import { MessageSquare, Star } from 'lucide-react';
 
-declare global {
-  interface Window {
-    google: any;
-  }
-}
+
 
 export default function FeedbackAnalytics() {
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
@@ -27,9 +23,9 @@ export default function FeedbackAnalytics() {
     const script = document.createElement('script');
     script.src = 'https://www.gstatic.com/charts/loader.js';
     script.onload = () => {
-      if (window.google) {
-        window.google.charts.load('current', { packages: ['corechart'] });
-        window.google.charts.setOnLoadCallback(() => {
+      if ((window as any).google) {
+        (window as any).google.charts.load('current', { packages: ['corechart'] });
+        (window as any).google.charts.setOnLoadCallback(() => {
           setChartsLoaded(true);
         });
       }
@@ -73,7 +69,7 @@ export default function FeedbackAnalytics() {
         }
       });
 
-      const data = new window.google.visualization.DataTable();
+      const data = new (window as any).google.visualization.DataTable();
       data.addColumn('string', 'Rating');
       data.addColumn('number', 'Responses');
       data.addRows([
@@ -94,7 +90,7 @@ export default function FeedbackAnalytics() {
       };
 
       if (!googleChartInstance.current) {
-        googleChartInstance.current = new window.google.visualization.ColumnChart(chartRef.current);
+        googleChartInstance.current = new (window as any).google.visualization.ColumnChart(chartRef.current);
       }
       googleChartInstance.current.draw(data, options);
     }

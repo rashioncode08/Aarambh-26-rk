@@ -60,16 +60,22 @@ export default function Registrations() {
   const totalPages = Math.ceil(registrations.length / itemsPerPage);
 
   const exportCSV = async () => {
-    const headers = ['Name', 'Roll Number', 'Branch', 'Year', 'Email', 'Phone', 'Registration Time', 'Entry Status'];
+    const headers = ['Name', 'Registration Number', 'Cohort', 'Year', 'Email', 'Phone', 'Registration Time', 'Entry Status', 'Father Name', 'Father Mobile', 'Mother Name', 'Mother Mobile', 'Address', 'Cohort Leader'];
     const rows = sortedRegistrations.map(r => [
-      `"${r.name}"`,
-      `"${r.rollNumber}"`,
-      `"${r.branch}"`,
-      r.year,
-      `"${r.email}"`,
-      `"${r.phone}"`,
+      `"${r.name || ''}"`,
+      `"${r.rollNumber || ''}"`,
+      `"${r.branch || ''}"`,
+      r.year || '',
+      `"${r.email || ''}"`,
+      `"${r.phone || ''}"`,
       `"${r.registeredAt ? r.registeredAt.toDate().toLocaleString() : ''}"`,
-      r.hasEntered ? 'Entered' : 'Pending'
+      r.hasEntered ? 'Entered' : 'Pending',
+      `"${r.fatherName || ''}"`,
+      `"${r.fatherMobile || ''}"`,
+      `"${r.motherName || ''}"`,
+      `"${r.motherMobile || ''}"`,
+      `"${(r.address || '').replace(/"/g, '""')}"`,
+      `"${r.cohortLeader || ''}"`
     ]);
 
     const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\\n');
@@ -173,14 +179,14 @@ export default function Registrations() {
 
       <Modal isOpen={!!selectedReg} onClose={() => setSelectedReg(null)} title="Registration Details">
         {selectedReg && (
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar pr-2">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-admin-muted mb-1">Full Name</p>
                 <p className="font-medium">{selectedReg.name}</p>
               </div>
               <div>
-                <p className="text-xs text-admin-muted mb-1">Roll Number</p>
+                <p className="text-xs text-admin-muted mb-1">Registration Number</p>
                 <p className="font-medium">{selectedReg.rollNumber}</p>
               </div>
               <div>
@@ -192,13 +198,42 @@ export default function Registrations() {
                 <p className="font-medium">{selectedReg.phone}</p>
               </div>
               <div>
-                <p className="text-xs text-admin-muted mb-1">Branch</p>
+                <p className="text-xs text-admin-muted mb-1">Cohort Name & Number</p>
                 <p className="font-medium">{selectedReg.branch}</p>
               </div>
               <div>
-                <p className="text-xs text-admin-muted mb-1">Year</p>
-                <p className="font-medium">{selectedReg.year}</p>
+                <p className="text-xs text-admin-muted mb-1">Cohort Leader</p>
+                <p className="font-medium">{selectedReg.cohortLeader || 'N/A'}</p>
               </div>
+              
+              <div className="col-span-2 border-t border-admin-border pt-4 mt-2">
+                <p className="text-sm text-admin-accent font-semibold mb-3">Parents Details</p>
+              </div>
+              <div>
+                <p className="text-xs text-admin-muted mb-1">Father's Name</p>
+                <p className="font-medium">{selectedReg.fatherName || 'N/A'}</p>
+              </div>
+              <div>
+                <p className="text-xs text-admin-muted mb-1">Father's Mobile</p>
+                <p className="font-medium">{selectedReg.fatherMobile || 'N/A'}</p>
+              </div>
+              <div>
+                <p className="text-xs text-admin-muted mb-1">Mother's Name</p>
+                <p className="font-medium">{selectedReg.motherName || 'N/A'}</p>
+              </div>
+              <div>
+                <p className="text-xs text-admin-muted mb-1">Mother's Mobile</p>
+                <p className="font-medium">{selectedReg.motherMobile || 'N/A'}</p>
+              </div>
+
+              <div className="col-span-2 border-t border-admin-border pt-4 mt-2">
+                <p className="text-sm text-admin-accent font-semibold mb-3">Additional Details</p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs text-admin-muted mb-1">Address</p>
+                <p className="font-medium whitespace-pre-wrap">{selectedReg.address || 'N/A'}</p>
+              </div>
+
               <div>
                 <p className="text-xs text-admin-muted mb-1">Entry Status</p>
                 <p className={`font-semibold ${selectedReg.hasEntered ? 'text-green-500' : 'text-yellow-500'}`}>
@@ -207,9 +242,13 @@ export default function Registrations() {
               </div>
               <div>
                 <p className="text-xs text-admin-muted mb-1">QR Code Link</p>
-                <a href={selectedReg.qrCodeURL} target="_blank" rel="noreferrer" className="text-admin-accent hover:underline break-all text-xs">
-                  View QR
-                </a>
+                {selectedReg.qrCodeURL ? (
+                  <a href={selectedReg.qrCodeURL} target="_blank" rel="noreferrer" className="text-admin-accent hover:underline break-all text-xs">
+                    View QR
+                  </a>
+                ) : (
+                  <span className="text-xs text-admin-muted">Not Generated</span>
+                )}
               </div>
             </div>
           </div>

@@ -33,7 +33,7 @@ export default function Announcements() {
 
   useEffect(() => {
     const unsub = onSnapshot(query(collection(db, 'announcements')), (snap) => {
-      let anns = snap.docs.map(d => ({ id: d.id, ...(d.data() as any) }));
+      let anns: any[] = snap.docs.map(d => ({ id: d.id, ...(d.data() as any) }));
       anns.sort((a, b) => {
         const timeA = a.postedAt?.toMillis() || 0;
         const timeB = b.postedAt?.toMillis() || 0;
