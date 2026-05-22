@@ -33,7 +33,6 @@ export default function Footer() {
             <li><Link href="/schedule" className="hover:text-brand-pink transition-colors">Event Schedule</Link></li>
             <li><Link href="/speakers" className="hover:text-brand-pink transition-colors">Guest Speakers</Link></li>
             <li><Link href="/register" className="hover:text-brand-pink transition-colors">Register</Link></li>
-            <li><Link href="/volunteer" className="hover:text-brand-pink transition-colors">Volunteer Portal</Link></li>
           </ul>
         </div>
 
@@ -52,7 +51,7 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto relative z-10 mt-14 pt-8 border-t border-brand-cloud/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-brand-cloud/40">
         <span>&copy; 2026 AARAMBH&apos;26. All rights reserved.</span>
-        <span className="brand-gradient-text font-semibold">Energy · Boldness · Possibility</span>
+        <span className="text-brand-pink font-semibold">Energy · Boldness · Possibility</span>
       </div>
     </footer>
   );

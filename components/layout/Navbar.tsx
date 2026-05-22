@@ -27,7 +27,6 @@ export default function Navbar() {
     { name: 'Schedule', href: '/schedule' },
     { name: 'Speakers', href: '/speakers' },
     { name: 'FAQ', href: '/faq' },
-    { name: 'Feedback', href: '/feedback' },
   ];
 
   return (
@@ -47,6 +46,7 @@ export default function Navbar() {
             height={42}
             className="h-9 md:h-10 w-auto"
             priority
+            loading="eager"
           />
         </Link>
 

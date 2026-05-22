@@ -43,7 +43,7 @@ export default {
       },
       fontFamily: {
         display: ['Syne', 'system-ui', 'sans-serif'],
-        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        sans: ['"Google Sans"', 'Roboto', 'system-ui', 'sans-serif'],
         adminHeading: ['"DM Serif Display"', 'serif'],
         adminBody: ['"DM Sans"', 'sans-serif'],
       },

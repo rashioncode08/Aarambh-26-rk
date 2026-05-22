@@ -1,74 +1,89 @@
 @import "tailwindcss";
-@config "../tailwind.config.js";
 
-:root {
-  --brand-orange: #FF9A00;
-  --brand-pink: #FF188C;
-  --brand-blue: #0D21DD;
-  --brand-ink: #030404;
-  --brand-cloud: #F5F1E5;
+@theme {
+  --color-brand-orange: #FF9A00;
+  --color-brand-pink: #FF188C;
+  --color-brand-blue: #0D21DD;
+  --color-brand-ink: #030404;
+  --color-brand-cloud: #F5F1E5;
+
+  --color-primary: #FF188C;
+  --color-primary-dark: #E0107A;
+
+  --color-secondary: #0D21DD;
+  --color-secondary-dark: #0A1AB8;
+
+  --color-accent: #FF9A00;
+  --color-accent-dark: #E68A00;
+
+  --color-dark: #030404;
+  --color-dark-lighter: #1a1a1a;
+  
+  --font-display: Syne, system-ui, sans-serif;
+  --font-sans: "Google Sans", Roboto, system-ui, sans-serif;
+  --font-adminHeading: "DM Serif Display", serif;
+  --font-adminBody: "DM Sans", sans-serif;
+
+  --shadow-brand-pink: 0 0 40px rgba(255, 24, 140, 0.25);
+  --shadow-brand-orange: 0 0 40px rgba(255, 154, 0, 0.25);
+  --shadow-brand-blue: 0 0 40px rgba(13, 33, 221, 0.25);
 }
 
 body {
-  color: var(--brand-cloud);
-  background-color: var(--brand-ink);
+  color: var(--color-brand-cloud);
+  background-color: var(--color-brand-ink);
   min-height: 100vh;
-  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
-@layer components {
-  .glass-card {
-    @apply bg-brand-cloud/5 backdrop-blur-md border border-brand-cloud/15 rounded-2xl shadow-xl;
-  }
-
-  .btn-primary {
-    @apply bg-brand-pink hover:bg-primary-dark text-brand-cloud font-bold py-2.5 px-6 rounded-full transition-all duration-300 shadow-brand-pink hover:shadow-lg hover:scale-[1.02] active:scale-[0.98];
-  }
-
-  .btn-accent {
-    @apply bg-brand-orange hover:bg-accent-dark text-brand-ink font-bold py-2.5 px-6 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
-  }
-
-  .btn-blue {
-    @apply bg-brand-blue hover:bg-secondary-dark text-brand-cloud font-bold py-2.5 px-6 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
-  }
-
-  .input-field {
-    @apply bg-brand-cloud/5 border border-brand-cloud/20 rounded-xl px-4 py-2.5 text-brand-cloud placeholder:text-brand-cloud/40 focus:outline-none focus:ring-2 focus:ring-brand-pink/50 focus:border-brand-pink/50 transition-all;
-  }
-
-  .brand-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-orange via-brand-pink to-brand-blue;
-  }
-
-  .page-eyebrow {
-    @apply text-brand-orange font-bold tracking-[0.2em] uppercase text-xs mb-3 block;
-  }
-
-  .page-title {
-    @apply font-display text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-cloud;
-  }
-
-  .page-subtitle {
-    @apply text-brand-cloud/60 text-lg md:text-xl max-w-2xl;
-  }
-
-  .section-heading {
-    @apply font-display text-3xl md:text-4xl font-bold text-brand-cloud uppercase tracking-wide;
-  }
-
-  .nav-link {
-    @apply text-sm font-semibold text-brand-cloud/70 hover:text-brand-pink transition-colors;
-  }
-
-  .nav-link-active {
-    @apply text-brand-pink;
-  }
-
-  .hero-glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-  }
+.glass-card {
+  @apply bg-brand-cloud/5 backdrop-blur-md border border-brand-cloud/15 rounded-md shadow-xl;
 }
+
+.btn-primary {
+  @apply bg-brand-pink hover:bg-primary-dark text-brand-cloud font-bold py-2.5 px-6 rounded-md transition-all duration-300 shadow-brand-pink hover:shadow-lg hover:scale-[1.02] active:scale-[0.98];
+}
+
+.btn-accent {
+  @apply bg-brand-orange hover:bg-accent-dark text-brand-ink font-bold py-2.5 px-6 rounded-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+}
+
+.btn-blue {
+  @apply bg-brand-blue hover:bg-secondary-dark text-brand-cloud font-bold py-2.5 px-6 rounded-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+}
+
+.input-field {
+  @apply bg-brand-cloud/5 border border-brand-cloud/20 rounded-md px-4 py-2.5 text-brand-cloud placeholder:text-brand-cloud/40 focus:outline-none focus:ring-2 focus:ring-brand-pink/50 focus:border-brand-pink/50 transition-all;
+}
+
+.page-eyebrow {
+  @apply text-brand-orange font-bold tracking-[0.2em] uppercase text-xs mb-3 block;
+}
+
+.page-title {
+  @apply font-display text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-brand-cloud;
+}
+
+.page-subtitle {
+  @apply text-brand-cloud/60 text-lg md:text-xl max-w-2xl;
+}
+
+.section-heading {
+  @apply font-display text-3xl md:text-4xl font-bold text-brand-cloud uppercase tracking-wide;
+}
+
+.nav-link {
+  @apply text-sm font-semibold text-brand-cloud/70 hover:text-brand-pink transition-colors;
+}
+
+.nav-link-active {
+  @apply text-brand-pink;
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+

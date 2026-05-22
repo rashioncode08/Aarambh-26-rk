@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { ArrowRight, ShieldCheck, PieChart, Users, Lock, Unlock, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ShieldCheck, Lock, Unlock, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -24,7 +24,7 @@ export default function Home() {
       if (regStatus === 'true') setHasRegistered(true);
     }
 
-    const targetDate = new Date('2026-03-15T09:00:00').getTime();
+    const targetDate = new Date('2026-07-14T09:00:00').getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const difference = targetDate - now;
@@ -68,6 +68,7 @@ export default function Home() {
             height={120}
             className="w-full max-w-md md:max-w-xl h-auto mb-8"
             priority
+            loading="eager"
           />
 
           <p className="page-subtitle mx-auto mb-12">
@@ -81,9 +82,20 @@ export default function Home() {
                 key={label}
                 className="p-4 sm:p-5 flex flex-col items-center border-brand-pink/20 bg-brand-pink/5"
               >
-                <span className="text-2xl sm:text-4xl font-display font-extrabold text-brand-cloud tabular-nums">
-                  {String(timeLeft[label.toLowerCase() as keyof TimeLeft]).padStart(2, '0')}
-                </span>
+                <div className="relative h-8 sm:h-10 overflow-hidden flex items-center justify-center w-full">
+                  <AnimatePresence mode="popLayout">
+                    <motion.span
+                      key={timeLeft[label.toLowerCase() as keyof TimeLeft]}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -20, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-2xl sm:text-4xl font-display font-extrabold text-brand-cloud tabular-nums absolute"
+                    >
+                      {String(timeLeft[label.toLowerCase() as keyof TimeLeft]).padStart(2, '0')}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
                 <span className="text-[10px] sm:text-xs text-brand-cloud/50 uppercase tracking-widest mt-1">
                   {label}
                 </span>
@@ -99,31 +111,19 @@ export default function Home() {
                 </Button>
               </Link>
             ) : (
-              <div className="bg-brand-blue/20 text-brand-cloud border border-brand-blue/40 px-6 py-3 rounded-full font-bold flex items-center gap-2">
+              <div className="bg-brand-blue/20 text-brand-cloud border border-brand-blue/40 px-6 py-3 rounded-md font-bold flex items-center gap-2">
                 <ShieldCheck size={20} className="text-brand-orange" /> You are Registered!
               </div>
             )}
-            <Link href="/check-in">
-              <Button variant="glass" className="flex items-center gap-2">
-                Volunteer Access
-              </Button>
-            </Link>
-            <Link href="/admin">
-              <Button
-                variant="glass"
-                className="flex items-center gap-2 border-brand-orange/30 text-brand-orange hover:border-brand-orange/60 hover:bg-brand-orange/10"
-              >
-                Admin Portal
-              </Button>
-            </Link>
+
           </div>
         </motion.div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark to-transparent pointer-events-none" />
+
       </section>
 
       {/* Brand strip */}
-      <section className="w-full py-6 border-y border-brand-cloud/10 bg-brand-gradient-soft">
+      <section className="w-full py-6 border-y border-brand-cloud/10 bg-brand-cloud/5">
         <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-8 md:gap-16 text-center">
           {[
             { label: 'Energy', color: 'text-brand-orange' },
@@ -137,36 +137,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Modules */}
-      <section className="py-24 px-4 w-full max-w-7xl">
-        <div className="text-center mb-14">
-          <span className="page-eyebrow">Explore</span>
-          <h2 className="section-heading">Platform Modules</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <ModuleCard
-            title="Digital Check-in"
-            desc="Seamless entry with QR verification for participants."
-            accent="pink"
-            icon={<ShieldCheck size={32} />}
-            link="/check-in"
-          />
-          <ModuleCard
-            title="Volunteer Portal"
-            desc="Coordinate tasks, roles, and duty rosters in real-time."
-            accent="blue"
-            icon={<Users size={32} />}
-            link="/volunteer"
-          />
-          <ModuleCard
-            title="Feedback & Analytics"
-            desc="Post-event insights and real-time satisfaction tracking."
-            accent="orange"
-            icon={<PieChart size={32} />}
-            link="/feedback"
-          />
-        </div>
-      </section>
+
 
       {/* Exclusive content */}
       <section className="py-24 px-4 w-full max-w-7xl">
@@ -251,38 +222,4 @@ export default function Home() {
   );
 }
 
-interface ModuleCardProps {
-  title: string;
-  desc: string;
-  icon: React.ReactElement;
-  link: string;
-  accent: 'pink' | 'blue' | 'orange';
-}
 
-const accentCard: Record<ModuleCardProps['accent'], string> = {
-  pink: 'hover:border-brand-pink/50',
-  blue: 'hover:border-brand-blue/50',
-  orange: 'hover:border-brand-orange/50',
-};
-const accentIcon: Record<ModuleCardProps['accent'], string> = {
-  pink: 'text-brand-pink group-hover:bg-brand-pink/15',
-  blue: 'text-brand-blue group-hover:bg-brand-blue/15',
-  orange: 'text-brand-orange group-hover:bg-brand-orange/15',
-};
-
-function ModuleCard({ title, desc, icon, link, accent }: ModuleCardProps) {
-  return (
-    <Link href={link}>
-      <Card className={`p-8 h-full flex flex-col items-start gap-4 cursor-pointer transition-all duration-300 group hover:scale-[1.02] ${accentCard[accent]}`}>
-        <motion.div
-          whileHover={{ y: -4 }}
-          className={`p-4 rounded-2xl bg-brand-cloud/5 transition-colors ${accentIcon[accent]}`}
-        >
-          {icon}
-        </motion.div>
-        <h3 className="text-2xl font-display font-bold text-brand-cloud">{title}</h3>
-        <p className="text-brand-cloud/60 leading-relaxed">{desc}</p>
-      </Card>
-    </Link>
-  );
-}

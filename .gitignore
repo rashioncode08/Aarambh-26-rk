@@ -82,3 +82,12 @@ tsc-errors.txt
 implementation_plan.md
 task.md
 walkthrough.md
+
+# API Keys
+*.csv
+
+# PWA files
+**/public/sw.js
+**/public/workbox-*.js
+**/public/fallback-*.html
+**/public/sw.js.map

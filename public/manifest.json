@@ -1,0 +1,16 @@
+{
+  "name": "Aarambh 2026",
+  "short_name": "Aarambh'26",
+  "description": "The ultimate convergence of technology, culture, and innovation at JK Lakshmipat University.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030404",
+  "theme_color": "#FF9A00",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}

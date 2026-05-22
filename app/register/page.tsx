@@ -15,6 +15,8 @@ function RegisterContent() {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [regId, setRegId] = useState<string | null>(null);
+  const [couponInput, setCouponInput] = useState('');
+  const [couponMessage, setCouponMessage] = useState('');
   
   const [formData, setFormData] = useState({
     name: '',
@@ -28,6 +30,7 @@ function RegisterContent() {
     motherMobile: '',
     motherEmail: '',
     address: '',
+    coupon: '',
   });
 
   useEffect(() => {
@@ -43,6 +46,7 @@ function RegisterContent() {
     try {
       const savedData = localStorage.getItem('pending_registration_data');
       const data = savedData ? JSON.parse(savedData) : formData;
+      if (savedData) setFormData(data);
 
       const res = await fetch('/api/register', {
         method: 'POST',
@@ -78,6 +82,16 @@ function RegisterContent() {
     if (step > 1) setStep(step - 1);
   };
 
+  const handleApplyCoupon = () => {
+    if (couponInput.toUpperCase() === 'TESTTEST') {
+      setFormData(prev => ({ ...prev, coupon: couponInput.toUpperCase() }));
+      setCouponMessage('Coupon applied successfully!');
+    } else {
+      setFormData(prev => ({ ...prev, coupon: '' }));
+      setCouponMessage('Invalid coupon code');
+    }
+  };
+
   const handlePayment = async () => {
     setIsProcessing(true);
     try {
@@ -106,9 +120,15 @@ function RegisterContent() {
         mode: process.env.NEXT_PUBLIC_CASHFREE_ENV === 'PRODUCTION' ? "production" : "sandbox" 
       });
       
-      await cashfree.checkout({
+      cashfree.checkout({
         paymentSessionId: order.payment_session_id,
-        redirectTarget: "_self",
+        redirectTarget: "_modal",
+      }).then((result: any) => {
+        if (result.error) {
+          console.error("Payment failed or cancelled:", result.error);
+        } else if (!result.redirect) {
+          verifyPayment(order.order_id);
+        }
       });
 
     } catch (error) {
@@ -180,7 +200,7 @@ function RegisterContent() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-brand-cloud/60">Full Name *</label>
-                      <input required name="name" value={formData.name} onChange={handleChange} className="input-field w-full py-3" placeholder="John Doe" suppressHydrationWarning />
+                      <input required name="name" value={formData.name} onChange={handleChange} className="input-field w-full py-3" placeholder="Enter your full name" suppressHydrationWarning />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-brand-cloud/60">Registration Number *</label>
@@ -192,7 +212,7 @@ function RegisterContent() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-brand-cloud/60">Email ID *</label>
-                      <input required type="email" name="email" value={formData.email} onChange={handleChange} className="input-field w-full py-3" placeholder="john@example.com" suppressHydrationWarning />
+                      <input required type="email" name="email" value={formData.email} onChange={handleChange} className="input-field w-full py-3" placeholder="Enter your email" suppressHydrationWarning />
                     </div>
                   </div>
                   <div className="flex justify-end pt-4">
@@ -256,10 +276,32 @@ function RegisterContent() {
                       <textarea required name="address" value={formData.address} onChange={handleChange} rows={3} className="input-field w-full resize-none py-3" placeholder="House No, Street, Landmark, City, Pincode" suppressHydrationWarning />
                     </div>
 
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-brand-cloud/60">Coupon Code (Optional)</label>
+                      <div className="flex gap-2">
+                        <input name="couponInput" value={couponInput} onChange={(e) => setCouponInput(e.target.value)} className="input-field w-full py-3 uppercase" placeholder="Enter coupon code" suppressHydrationWarning />
+                        <Button type="button" variant="accent" onClick={handleApplyCoupon} className="px-6 whitespace-nowrap">Apply</Button>
+                      </div>
+                      {couponMessage && (
+                        <p className={`text-sm ${couponMessage.includes('successfully') ? 'text-green-400' : 'text-red-400'}`}>
+                          {couponMessage}
+                        </p>
+                      )}
+                    </div>
+
                     <div className="bg-brand-orange/10 border border-brand-orange/30 p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
                       <div>
                         <p className="text-sm text-brand-cloud/60 uppercase tracking-widest mb-1">Registration Fee</p>
-                        <p className="text-3xl font-display font-extrabold text-brand-orange">₹ 1,500</p>
+                        <div className="flex items-center gap-3">
+                          {formData.coupon.toUpperCase() === 'TESTTEST' ? (
+                            <>
+                              <p className="text-lg font-display text-brand-cloud/40 line-through">₹ 1,500</p>
+                              <p className="text-3xl font-display font-extrabold text-brand-orange">₹ 1</p>
+                            </>
+                          ) : (
+                            <p className="text-3xl font-display font-extrabold text-brand-orange">₹ 1,500</p>
+                          )}
+                        </div>
                       </div>
                       <Button variant="accent" onClick={handlePayment} className="px-10 py-6 flex items-center gap-2 text-lg">
                         <CreditCard size={24} /> Pay Now
