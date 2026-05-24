@@ -241,8 +241,8 @@ export async function sendEmail(to: string, name: string, pdfBytes: Uint8Array) 
     port: parseInt(process.env.SMTP_PORT || '587', 10),
     secure: false, // true for 465, false for 587 (STARTTLS)
     auth: {
-      user: process.env.SMTP_USER || 'aarambh@jklu.edu.in',
-      pass: process.env.SMTP_PASS || 'qqkbdnqdffcjpfcs',
+      user: process.env.SMTP_USER || '',
+      pass: process.env.SMTP_PASS || '',
     },
     tls: {
       ciphers: 'SSLv3',
@@ -299,7 +299,7 @@ export async function sendEmail(to: string, name: string, pdfBytes: Uint8Array) 
   `;
 
   await transporter.sendMail({
-    from: `"Aarambh Team" <${process.env.SMTP_FROM || 'aarambh@jklu.edu.in'}>`,
+    from: `"Aarambh Team" <${process.env.SMTP_FROM || ''}>`,
     to: to,
     subject: "Aarambh'26 | Your Registration is Confirmed!",
     html: htmlContent,
