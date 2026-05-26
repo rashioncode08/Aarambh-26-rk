@@ -5,7 +5,7 @@ import WhatIsAarambh from './WhatIsAarambh';
 
 export default function AboutSection() {
   return (
-    <div id="about" className="w-full flex flex-col bg-dark text-white overflow-hidden">
+    <div id="about" className="w-full flex flex-col bg-brand-cloud text-brand-ink overflow-hidden">
       <Hero />
       <WhatIsAarambh />
     </div>

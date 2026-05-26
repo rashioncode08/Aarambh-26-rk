@@ -265,9 +265,17 @@ function RegisterContent() {
 
       <div className="w-full max-w-3xl relative z-10">
         <div className="mb-12 text-center flex flex-col items-center">
-          <h1 className="text-4xl md:text-6xl font-display font-black mb-3 text-brand-ink uppercase tracking-tighter drop-shadow-[4px_4px_0px_#FF188C] select-none">
-            AARAMBH&apos;26 REGISTRATION
-          </h1>
+          <Image 
+            src="/aarambh-registration.svg" 
+            alt="Aarambh '26 Registration" 
+            width={800} 
+            height={231} 
+            priority
+            className="w-full max-w-2xl h-auto object-contain select-none"
+            style={{ 
+              filter: "drop-shadow(2px 2px 0px #030404) drop-shadow(-2px -2px 0px #030404) drop-shadow(2px -2px 0px #030404) drop-shadow(-2px 2px 0px #030404) drop-shadow(6px 6px 0px #FF188C)" 
+            }}
+          />
         </div>
 
         <div className="border-comic bg-brand-cloud/80 backdrop-blur-md text-brand-ink p-6 md:p-12 rounded-2xl shadow-comic-lg relative overflow-hidden bg-halftone-black">
@@ -289,12 +297,15 @@ function RegisterContent() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between border-b-4 border-brand-ink pb-4">
                   <div className="flex items-center gap-3 text-brand-pink">
-                    <User size={24} className="stroke-[3]" />
                     <h2 className="text-2xl font-display font-black uppercase tracking-wider text-brand-ink">Student Details</h2>
                   </div>
                   {isStudentValid ? (
-                    <span className="flex items-center gap-1.5 px-3 py-1 border-2 border-brand-ink bg-green-400 text-brand-ink font-display text-[10px] font-black uppercase rounded shadow-comic-sm rotate-3">
-                      <Check size={12} className="stroke-[4]" /> READY
+                    <span className="flex items-center gap-1.5 px-3 py-1 border-2 border-brand-ink bg-green-400 text-brand-ink font-display text-[9px] font-black uppercase rounded shadow-comic-sm rotate-3">
+                      <Check size={12} className="stroke-[4] shrink-0" />
+                      <span className="flex flex-col text-left leading-tight">
+                        <span>Requirement</span>
+                        <span>Fulfilled</span>
+                      </span>
                     </span>
                   ) : (
                     <span className="px-3 py-1 border-2 border-brand-ink bg-brand-pink text-brand-cloud font-display text-[10px] font-black uppercase rounded shadow-comic-sm -rotate-2">
@@ -361,13 +372,16 @@ function RegisterContent() {
               <div className="space-y-6">
                 <div className={`flex items-center justify-between border-b-4 border-brand-ink pb-4 transition-all duration-300 ${!isStudentValid ? 'opacity-30' : ''}`}>
                   <div className="flex items-center gap-3 text-brand-blue">
-                    {!isStudentValid ? <Lock size={24} className="stroke-[3] text-brand-ink/40" /> : <ShieldCheck size={24} className="stroke-[3]" />}
                     <h2 className="text-2xl font-display font-black uppercase tracking-wider text-brand-ink">Parents Details</h2>
                   </div>
                   {isStudentValid ? (
                     isParentsValid ? (
-                      <span className="flex items-center gap-1.5 px-3 py-1 border-2 border-brand-ink bg-green-400 text-brand-ink font-display text-[10px] font-black uppercase rounded shadow-comic-sm rotate-3">
-                        <Check size={12} className="stroke-[4]" /> READY
+                      <span className="flex items-center gap-1.5 px-3 py-1 border-2 border-brand-ink bg-green-400 text-brand-ink font-display text-[9px] font-black uppercase rounded shadow-comic-sm rotate-3">
+                        <Check size={12} className="stroke-[4] shrink-0" />
+                        <span className="flex flex-col text-left leading-tight">
+                          <span>Requirement</span>
+                          <span>Fulfilled</span>
+                        </span>
                       </span>
                     ) : (
                       <span className="px-3 py-1 border-2 border-brand-ink bg-brand-blue text-brand-cloud font-display text-[10px] font-black uppercase rounded shadow-comic-sm -rotate-2">
@@ -476,7 +490,6 @@ function RegisterContent() {
               <div className="space-y-6">
                 <div className={`flex items-center justify-between border-b-4 border-brand-ink pb-4 transition-all duration-300 ${(!isStudentValid || !isParentsValid) ? 'opacity-30' : ''}`}>
                   <div className="flex items-center gap-3 text-brand-orange">
-                    {(!isStudentValid || !isParentsValid) ? <Lock size={24} className="stroke-[3] text-brand-ink/40" /> : <HomeIcon size={24} className="stroke-[3]" />}
                     <h2 className="text-2xl font-display font-black uppercase tracking-wider text-brand-ink">Address & Verification</h2>
                   </div>
                   {isStudentValid && isParentsValid ? (
