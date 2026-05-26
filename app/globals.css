@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Vanilla Extract";
+  src: url("/fonts/Vanillaextract-1GZ84.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vanilla Extract";
+  src: url("/fonts/Vanillaextractital-Rpdel.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme {
   --color-brand-orange: #FF9A00;
   --color-brand-pink: #FF188C;
@@ -26,10 +42,11 @@
   --color-dark: #030404;
   --color-dark-lighter: #1a1a1a;
 
-  --font-display: Syne, system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
   --font-sans: "Google Sans", Roboto, system-ui, sans-serif;
   --font-adminHeading: "DM Serif Display", serif;
   --font-adminBody: "DM Sans", sans-serif;
+  --font-vanilla: "Vanilla Extract", sans-serif;
 
   --shadow-brand-pink: 0 0 40px rgba(255, 24, 140, 0.25);
   --shadow-brand-orange: 0 0 40px rgba(255, 154, 0, 0.25);

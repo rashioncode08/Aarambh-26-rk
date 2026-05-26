@@ -184,7 +184,7 @@ export default function CustomCursor() {
         ctx.translate(p.x, p.y);
         ctx.rotate(p.angle);
         
-        ctx.font = `bold ${Math.round(p.baseSize * p.scale)}px Syne, system-ui, sans-serif`;
+        ctx.font = `bold ${Math.round(p.baseSize * p.scale)}px Outfit, system-ui, sans-serif`;
         ctx.fillStyle = p.color;
         ctx.globalAlpha = p.opacity;
         

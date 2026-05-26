@@ -204,35 +204,22 @@ function RegisterContent() {
         </div>
 
         <div className="max-w-md w-full bg-brand-cloud border-comic p-8 md:p-12 text-center flex flex-col items-center rounded-2xl shadow-comic-lg relative z-10">
-          <div className="absolute top-4 right-4 text-[9px] font-mono font-bold text-brand-cloud bg-brand-ink px-2.5 py-0.5 border border-brand-ink rounded">
-            SYSTEM: ENROLLED
-          </div>
           
-          {/* Starburst badge stamp */}
-          <motion.div 
-            initial={{ scale: 0, rotate: -30 }} 
-            animate={{ scale: 1, rotate: 12 }} 
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="w-24 h-24 rounded-full border-4 border-dashed border-brand-pink bg-white flex flex-col items-center justify-center text-center p-3 mb-8 shadow-comic-sm"
-          >
-            <span className="font-display font-black text-brand-pink text-xs leading-none uppercase tracking-tighter">
-              APPROVED
-            </span>
-            <span className="text-[6px] font-black text-brand-ink uppercase mt-1 tracking-widest leading-none">
-              BY THE SQUAD
-            </span>
-          </motion.div>
+          
+          
 
-          <h1 className="text-3xl font-display font-black text-brand-ink uppercase tracking-tight mb-2">Registration Successful!</h1>
-          <p className="font-bold text-sm text-brand-ink/70 mb-6 leading-relaxed uppercase">
-            Your payment has been processed. A copy of your details has been mailed to <strong className="text-brand-pink">{formData.email}</strong>.
+          <h1 className="text-3xl md:text-4xl font-vanilla text-brand-ink mb-4">
+            Registration Successful!
+          </h1>
+          <p className="font-sans font-medium text-sm text-brand-ink/70 mb-6 leading-relaxed">
+            Your payment has been processed. A copy of your details has been mailed to <strong className="text-brand-pink font-semibold">{formData.email}</strong>.
           </p>
           <div className="bg-white border-comic-thin px-4 py-2.5 rounded-xl font-mono text-xs tracking-wider mb-8 text-brand-ink w-full shadow-comic-sm">
             REGISTRATION ID: {regId}
           </div>
           <button 
             onClick={() => router.push('/')} 
-            className="w-full py-4 bg-brand-pink hover:bg-brand-pink/90 text-brand-cloud border-comic shadow-comic font-display font-black text-sm uppercase tracking-wider rounded-xl comic-interactive cursor-pointer"
+            className="w-full py-4 bg-brand-pink hover:bg-brand-pink/90 text-brand-cloud border-comic shadow-comic font-sans font-black text-sm uppercase tracking-wider rounded-xl comic-interactive cursor-pointer"
           >
             Back to Home
           </button>
@@ -314,7 +301,7 @@ function RegisterContent() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between border-b-4 border-brand-ink pb-4">
                   <div className="flex items-center gap-3 text-brand-pink">
-                    <h2 className="text-2xl font-display font-black uppercase tracking-wider text-brand-ink">Student Details</h2>
+                    <h2 className="text-3xl font-vanilla text-brand-ink">Student Details</h2>
                   </div>
                   {isStudentValid ? (
                     <span className="flex items-center gap-1.5 px-3 py-1 border-2 border-brand-ink bg-green-400 text-brand-ink font-display text-[9px] font-black uppercase rounded shadow-comic-sm rotate-3">
@@ -393,7 +380,7 @@ function RegisterContent() {
               <div className="space-y-6">
                 <div className={`flex items-center justify-between border-b-4 border-brand-ink pb-4 transition-all duration-300 ${!isStudentValid ? 'opacity-30' : ''}`}>
                   <div className="flex items-center gap-3 text-brand-blue">
-                    <h2 className="text-2xl font-display font-black uppercase tracking-wider text-brand-ink">Parents Details</h2>
+                    <h2 className="text-3xl font-vanilla text-brand-ink">Parents Details</h2>
                   </div>
                   {isStudentValid ? (
                     isParentsValid ? (
@@ -515,7 +502,7 @@ function RegisterContent() {
               <div className="space-y-6">
                 <div className={`flex items-center justify-between border-b-4 border-brand-ink pb-4 transition-all duration-300 ${(!isStudentValid || !isParentsValid) ? 'opacity-30' : ''}`}>
                   <div className="flex items-center gap-3 text-brand-orange">
-                    <h2 className="text-2xl font-display font-black uppercase tracking-wider text-brand-ink">Address & Verification</h2>
+                    <h2 className="text-3xl font-vanilla text-brand-ink">Address & Verification</h2>
                   </div>
                   {isStudentValid && isParentsValid ? (
                     isAddressValid ? (

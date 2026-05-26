@@ -12,5 +12,9 @@
       "sizes": "any",
       "type": "image/png"
     }
-  ]
+  ],
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/"
+  }
 }
