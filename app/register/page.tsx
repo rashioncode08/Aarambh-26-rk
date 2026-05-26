@@ -166,10 +166,10 @@ function RegisterContent() {
 
   if (isSuccess) {
     return (
-      <div className="relative w-full min-h-screen flex items-center justify-center p-6 selection:bg-brand-ink selection:text-brand-cloud text-brand-ink overflow-hidden">
+      <div className="relative w-full min-h-screen flex items-center justify-center p-4 sm:p-6 selection:bg-brand-ink selection:text-brand-cloud text-brand-ink overflow-hidden">
         <ComicBackground />
 
-        <div className="max-w-md w-full bg-brand-cloud border-comic p-8 md:p-12 text-center flex flex-col items-center rounded-2xl shadow-comic-lg relative z-10">
+        <div className="max-w-md w-full bg-brand-cloud border-comic p-6 sm:p-8 md:p-12 text-center flex flex-col items-center rounded-2xl shadow-comic-lg relative z-10">
           
           <h1 className="text-3xl md:text-4xl font-vanilla text-brand-ink mb-4">
             Registration Successful!
@@ -192,11 +192,11 @@ function RegisterContent() {
   }
 
   return (
-    <div className="relative w-full min-h-screen py-24 px-4 flex flex-col items-center selection:bg-brand-ink selection:text-brand-cloud text-brand-ink overflow-hidden">
+    <div className="relative w-full min-h-screen py-8 sm:py-16 md:py-24 px-3 sm:px-4 flex flex-col items-center selection:bg-brand-ink selection:text-brand-cloud text-brand-ink overflow-hidden">
       <ComicBackground />
 
       <div className="w-full max-w-3xl relative z-10">
-        <div className="mb-12 text-center flex flex-col items-center">
+        <div className="mb-6 sm:mb-8 md:mb-12 text-center flex flex-col items-center">
           <Image 
             src="/aarambh-registration.svg" 
             alt="Aarambh '26 Registration" 
@@ -210,7 +210,7 @@ function RegisterContent() {
           />
         </div>
 
-        <div className="border-comic bg-brand-cloud/80 backdrop-blur-md text-brand-ink p-6 md:p-12 rounded-2xl shadow-comic-lg relative overflow-hidden bg-halftone-black">
+        <div className="border-comic bg-brand-cloud/80 backdrop-blur-md text-brand-ink p-4 sm:p-6 md:p-12 rounded-2xl shadow-comic-lg relative overflow-hidden bg-halftone-black">
           {isProcessing ? (
             <div className="py-20 text-center flex flex-col items-center gap-4">
               <Loader2 size={48} className="text-brand-pink animate-spin stroke-[3]" />
@@ -227,9 +227,9 @@ function RegisterContent() {
 
               {/* SECTION 1. STUDENT DETAILS */}
               <div className="space-y-6">
-                <div className="flex items-center justify-between border-b-4 border-brand-ink pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-4 border-brand-ink pb-4">
                   <div className="flex items-center gap-3 text-brand-pink">
-                    <h2 className="text-3xl font-vanilla text-brand-ink">Student Details</h2>
+                    <h2 className="text-2xl sm:text-3xl font-vanilla text-brand-ink">Student Details</h2>
                   </div>
                   {isStudentValid ? (
                     <span className="flex items-center gap-1.5 px-3 py-1 border-2 border-brand-ink bg-green-400 text-brand-ink font-display text-[9px] font-black uppercase rounded shadow-comic-sm rotate-3">
@@ -306,9 +306,9 @@ function RegisterContent() {
 
               {/* SECTION 2. PARENTS DETAILS (ACCORDION) */}
               <div className="space-y-6">
-                <div className={`flex items-center justify-between border-b-4 border-brand-ink pb-4 transition-all duration-300 ${!isStudentValid ? 'opacity-30' : ''}`}>
+                <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-4 border-brand-ink pb-4 transition-all duration-300 ${!isStudentValid ? 'opacity-30' : ''}`}>
                   <div className="flex items-center gap-3 text-brand-blue">
-                    <h2 className="text-3xl font-vanilla text-brand-ink">Parents Details</h2>
+                    <h2 className="text-2xl sm:text-3xl font-vanilla text-brand-ink">Parents Details</h2>
                   </div>
                   {isStudentValid ? (
                     isParentsValid ? (
@@ -428,9 +428,9 @@ function RegisterContent() {
 
               {/* SECTION 3. ADDRESS & PAYMENT (ACCORDION) */}
               <div className="space-y-6">
-                <div className={`flex items-center justify-between border-b-4 border-brand-ink pb-4 transition-all duration-300 ${(!isStudentValid || !isParentsValid) ? 'opacity-30' : ''}`}>
+                <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-4 border-brand-ink pb-4 transition-all duration-300 ${(!isStudentValid || !isParentsValid) ? 'opacity-30' : ''}`}>
                   <div className="flex items-center gap-3 text-brand-orange">
-                    <h2 className="text-3xl font-vanilla text-brand-ink">Address & Verification</h2>
+                    <h2 className="text-2xl sm:text-3xl font-vanilla text-brand-ink">Address & Verification</h2>
                   </div>
                   {isStudentValid && isParentsValid ? (
                     isAddressValid ? (
@@ -506,7 +506,7 @@ function RegisterContent() {
                         )}
                       </div>
 
-                      <div className="border-comic bg-brand-pink/5 p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-6 relative overflow-hidden shadow-comic bg-halftone-black opacity-95">
+                      <div className="border-comic bg-brand-pink/5 p-4 sm:p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-6 relative overflow-hidden shadow-comic bg-halftone-black opacity-95">
                         <div className="absolute top-2 right-2 text-[8px] font-black uppercase border-comic-thin px-2 py-0.5 bg-brand-pink text-brand-cloud rounded shadow-comic-sm">
                           OFFICIAL TICKET
                         </div>
