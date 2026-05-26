@@ -38,6 +38,7 @@
 
 html {
   background-color: var(--color-brand-cloud);
+  scroll-behavior: smooth;
 }
 
 body {
