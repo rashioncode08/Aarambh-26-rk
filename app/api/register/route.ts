@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     if (action === 'CREATE_ORDER') {
       try {
         const orderId = `order_${Date.now()}`;
-        const orderAmount = data.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 1500;
+        const orderAmount = data.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 2500;
 
         console.log("Saving pending registration for order ID:", orderId);
         if (!db) {

@@ -561,11 +561,19 @@ function RegisterContent() {
                           <div className="flex items-center gap-3">
                             {formData.coupon.toUpperCase() === 'TESTTEST' ? (
                               <>
-                                <p className="text-lg font-display font-black text-brand-ink/30 line-through">₹ 1,500</p>
+                                <p className="text-lg font-display font-black text-brand-ink/30 line-through">₹ 3,500</p>
                                 <p className="text-4xl font-display font-black text-brand-pink drop-shadow-[2px_2px_0px_#030404]">₹ 1</p>
                               </>
                             ) : (
-                              <p className="text-4xl font-display font-black text-brand-pink drop-shadow-[2px_2px_0px_#030404]">₹ 1,500</p>
+                              <div className="flex flex-col">
+                                <div className="flex items-center gap-3">
+                                  <p className="text-lg font-display font-black text-brand-ink/30 line-through">₹ 3,500</p>
+                                  <p className="text-4xl font-display font-black text-brand-pink drop-shadow-[2px_2px_0px_#030404]">₹ 2,500</p>
+                                </div>
+                                <p className="text-[9px] font-black uppercase text-brand-ink/40 tracking-wider mt-1.5">
+                                  * Excludes 2% Cashfree transaction fee
+                                </p>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -575,6 +583,16 @@ function RegisterContent() {
                         >
                           <CreditCard size={24} className="stroke-[3]" /> Pay Now
                         </button>
+                      </div>
+
+                      <div className="mt-4 border-2 border-brand-ink bg-white p-4 rounded-xl text-center shadow-comic-sm space-y-2">
+                        <p className="text-xs font-black uppercase tracking-wider text-brand-pink">
+                          Important Note: The registration fee is strictly non-refundable under any circumstances.
+                        </p>
+                        <div className="h-[2px] bg-brand-ink/10 w-12 mx-auto" />
+                        <p className="text-[9px] font-black uppercase tracking-wider text-brand-ink/50 leading-relaxed">
+                          Please note: A 2% gateway transaction fee charged by Cashfree Payments will be added at checkout and is to be paid by the participant.
+                        </p>
                       </div>
                     </motion.div>
                   )}

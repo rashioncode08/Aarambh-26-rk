@@ -185,7 +185,7 @@ export async function generatePDF(data: any, id: string, paymentId: string, orde
 
   // 4. PAYMENT SUMMARY Section
   drawSectionHeader('PAYMENT SUMMARY', 201);
-  let amountStr = '1,500.00';
+  let amountStr = '2,500.00';
   if (data.paymentAmount !== undefined) {
     amountStr = Number(data.paymentAmount).toFixed(2);
   } else if (data.coupon?.toUpperCase() === 'TESTTEST') {
@@ -349,8 +349,8 @@ export async function finalizeRegistration(formData: any, paymentId: string, ord
     parentName: formData.parentName || 'N/A',
     parentPhone: formData.parentPhone || 'N/A',
     parentEmail: formData.parentEmail || 'N/A',
-    paymentAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 1500,
-    receivedAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 1500,
+    paymentAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 2500,
+    receivedAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 2500,
     dateOfPayment: dateOfPayment,
     dateGroup: dateGroup,
     hasEntered: false,
@@ -428,8 +428,8 @@ export async function finalizeRegistration(formData: any, paymentId: string, ord
           motherEmail: '',
           address: formData.address || 'N/A',
           pincode: formData.pincode || (formData.address ? (formData.address.match(/\b\d{6}\b/)?.[0] || 'N/A') : 'N/A'),
-          paymentAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 1500,
-          receivedAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 1500,
+          paymentAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 2500,
+          receivedAmount: formData.coupon?.toUpperCase() === 'TESTTEST' ? 1 : 2500,
           dateOfPayment: dateOfPayment,
           dateGroup: dateGroup,
           paymentId: paymentId,

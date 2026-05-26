@@ -209,8 +209,8 @@ export default function Registrations() {
     const rows = sortedRegistrations.map((r, index) => {
       const pin = r.pincode || (r.address ? (r.address.match(/\b\d{6}\b/)?.[0] || 'N/A') : 'N/A');
       const formattedDate = r.dateOfPayment || (r.registeredAt ? r.registeredAt.toDate().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }).replace(/ /g, '-') : 'N/A');
-      const payAmount = r.paymentAmount ? `₹ ${r.paymentAmount}` : '₹ 1500';
-      const recAmount = r.receivedAmount ? `₹ ${r.receivedAmount}` : '₹ 1500';
+      const payAmount = r.paymentAmount ? `₹ ${r.paymentAmount}` : '₹ 2500';
+      const recAmount = r.receivedAmount ? `₹ ${r.receivedAmount}` : '₹ 2500';
 
       return [
         `"${index + 1}"`,
@@ -478,13 +478,13 @@ export default function Registrations() {
               <div className="col-span-2 sm:col-span-1">
                 <p className="text-[10px] font-black text-admin-muted mb-1">Payment Amount</p>
                 <p className="font-black text-brand-ink bg-brand-cloud/45 p-2.5 border-2 border-brand-ink rounded-md">
-                  {selectedReg.paymentAmount ? `₹ ${selectedReg.paymentAmount}` : '₹ 1,500'}
+                  {selectedReg.paymentAmount ? `₹ ${selectedReg.paymentAmount}` : '₹ 2,500'}
                 </p>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <p className="text-[10px] font-black text-admin-muted mb-1">Received Amount</p>
                 <p className="font-black text-brand-ink bg-brand-cloud/45 p-2.5 border-2 border-brand-ink rounded-md">
-                  {selectedReg.receivedAmount ? `₹ ${selectedReg.receivedAmount}` : '₹ 1,500'}
+                  {selectedReg.receivedAmount ? `₹ ${selectedReg.receivedAmount}` : '₹ 2,500'}
                 </p>
               </div>
               <div className="col-span-2 sm:col-span-1">
