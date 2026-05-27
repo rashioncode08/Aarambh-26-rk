@@ -1,10 +1,10 @@
 import crypto from 'crypto';
 
-// 1. Rate Limiting Map
+// 1. In-memory Rate Limiting Map
 const rateLimitMap = new Map<string, { count: number; firstRequest: number }>();
 
 /**
- * In-memory rate limiting mechanism.
+ * Custom in-memory rate limiting mechanism.
  * Limits the number of requests per IP within a specified time window.
  */
 export function isRateLimited(ip: string, limit: number = 5, windowMs: number = 60000): boolean {

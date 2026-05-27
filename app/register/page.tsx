@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Loader2, CreditCard, ArrowLeft, ArrowRight, User, ShieldCheck, Home as HomeIcon, Lock, Unlock, Check } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -68,7 +68,7 @@ function RegisterContent() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -306,15 +306,27 @@ function RegisterContent() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-brand-ink/75 block mb-1">Course *</label>
-                    <input 
-                      required 
-                      name="course" 
-                      value={formData.course} 
-                      onChange={handleChange} 
-                      className="w-full px-4 py-3 bg-white border-comic-thin text-brand-ink placeholder:text-brand-ink/40 font-bold focus:outline-none focus:translate-x-0.5 focus:translate-y-0.5 focus:shadow-comic-sm transition-all rounded-xl"
-                      placeholder="e.g. B.Tech CSE" 
-                      suppressHydrationWarning 
-                    />
+                    <select
+                      required
+                      name="course"
+                      value={formData.course}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 bg-white border-comic-thin font-bold focus:outline-none focus:translate-x-0.5 focus:translate-y-0.5 focus:shadow-comic-sm transition-all rounded-xl appearance-none cursor-pointer pr-10 ${
+                        formData.course ? 'text-brand-ink' : 'text-brand-ink/40'
+                      }`}
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23030404' stroke-width='3' stroke-linecap='square' stroke-linejoin='miter'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e")`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'right 1rem center',
+                        backgroundSize: '1.25rem',
+                      }}
+                    >
+                      <option value="" disabled hidden>Select Course</option>
+                      <option value="B.Tech" className="text-brand-ink font-bold">B.Tech</option>
+                      <option value="BBA" className="text-brand-ink font-bold">BBA</option>
+                      <option value="B.Des" className="text-brand-ink font-bold">B.Des</option>
+                      <option value="M.Des" className="text-brand-ink font-bold">M.Des</option>
+                    </select>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-brand-ink/75 block mb-1">Gender *</label>
@@ -323,13 +335,19 @@ function RegisterContent() {
                       name="gender"
                       value={formData.gender}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-white border-comic-thin text-brand-ink/40 text-brand-ink font-bold focus:outline-none focus:translate-x-0.5 focus:translate-y-0.5 focus:shadow-comic-sm transition-all rounded-xl cursor-pointer"
-                      suppressHydrationWarning
+                      className={`w-full px-4 py-3 bg-white border-comic-thin font-bold focus:outline-none focus:translate-x-0.5 focus:translate-y-0.5 focus:shadow-comic-sm transition-all rounded-xl appearance-none cursor-pointer pr-10 ${
+                        formData.gender ? 'text-brand-ink' : 'text-brand-ink/40'
+                      }`}
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23030404' stroke-width='3' stroke-linecap='square' stroke-linejoin='miter'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e")`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'right 1rem center',
+                        backgroundSize: '1.25rem',
+                      }}
                     >
-                      <option value="" disabled>Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
+                      <option value="" disabled hidden>Select Gender</option>
+                      <option value="Male" className="text-brand-ink font-bold">Male</option>
+                      <option value="Female" className="text-brand-ink font-bold">Female</option>
                     </select>
                   </div>
                 </div>
