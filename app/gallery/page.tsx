@@ -549,7 +549,6 @@ export default function GalleryLanding() {
           const hS = parseFloat(card.dataset.hoverScale || "1")
 
           card.style.transform = `translate(-50%, -50%) scale(${scale * hS})`
-          card.style.zIndex = String(Math.round(z + 3000))
 
           let opacity = 0.02
           if (z < -3600) {
@@ -558,12 +557,25 @@ export default function GalleryLanding() {
             opacity = 0.12 + ((z + 3600) / 2000) * 0.65
           } else if (z < -400) {
             opacity = 0.77 + ((z + 1600) / 1200) * 0.23
-          } else if (z < 200) {
+          } else if (z < 150) {
             opacity = 1
           } else {
             opacity = 0
           }
-          card.style.opacity = String(Math.max(0, Math.min(1, opacity)))
+          const finalOpacity = Math.max(0, Math.min(1, opacity))
+          card.style.opacity = String(finalOpacity)
+
+          // KEY FIX: invisible/fading cards must NEVER intercept clicks.
+          // Only cards that are clearly visible (opacity > 0.15) should be clickable.
+          // Also cap z-index so fading-out cards (z≥150) can't float above visible ones.
+          if (finalOpacity < 0.15) {
+            card.style.pointerEvents = 'none'
+            card.style.zIndex = '1'  // push invisible cards to the very bottom
+          } else {
+            card.style.pointerEvents = 'auto'
+            // z-index based on depth: closer cards (higher z) get higher index
+            card.style.zIndex = String(Math.round(z + 3000))
+          }
         })
 
         animRef.current = requestAnimationFrame(tick)
