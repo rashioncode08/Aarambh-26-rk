@@ -429,7 +429,9 @@ export default function GalleryLanding() {
       card.dataset.baseZ = String(baseZ)
       card.dataset.wallIdx = String(wallIdx)
       card.dataset.photoIdx = String(photoIdx)
+      // Store photoId and photoSrc in dataset – animation loop keeps these in sync
       card.dataset.photoId = String(photo.id)
+      card.dataset.photoSrc = photo.src
 
       card.onmouseenter = () => {
         card.dataset.hoverScale = "1.08"
@@ -454,12 +456,12 @@ export default function GalleryLanding() {
 
       card.appendChild(img)
 
+      // Read photoId directly from dataset (animation loop keeps it in sync with img.src)
       card.addEventListener('click', () => {
-        const displayedSrc = img.getAttribute('src')
-        const clickedPhoto = PHOTOS.find(p => p.src === displayedSrc)
-        if (clickedPhoto) {
-          console.log("Clicked photo source:", displayedSrc, "Found ID:", clickedPhoto.id)
-          setLightboxId(clickedPhoto.id)
+        const photoId = parseInt(card.dataset.photoId || '0', 10)
+        const found = PHOTOS.find(p => p.id === photoId)
+        if (found) {
+          setLightboxId(found.id)
         }
       })
 
@@ -499,7 +501,9 @@ export default function GalleryLanding() {
             const img = card.querySelector('img')
             if (img && randomPhoto) {
               img.setAttribute('src', randomPhoto.src)
+              // Keep dataset in sync so click handler always reads the correct photo
               card.dataset.photoId = String(randomPhoto.id)
+              card.dataset.photoSrc = randomPhoto.src
             }
           } else if (z < BASE_Z_FAR - 100) {
             const newBaseZ = baseZ + (CARD_COUNT * BASE_Z_STEP)
@@ -514,7 +518,9 @@ export default function GalleryLanding() {
             const img = card.querySelector('img')
             if (img && randomPhoto) {
               img.setAttribute('src', randomPhoto.src)
+              // Keep dataset in sync so click handler always reads the correct photo
               card.dataset.photoId = String(randomPhoto.id)
+              card.dataset.photoSrc = randomPhoto.src
             }
           }
 
