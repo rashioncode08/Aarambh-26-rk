@@ -2,10 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
-
+import { ArrowRight, ShieldCheck, Lock, Unlock, Sparkles, Calendar, Ticket, Compass, Users, Radio } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import AboutSection from '@/components/about';
 
 interface TimeLeft {
@@ -115,351 +113,17 @@ const playSynthSound = (type: 'boom' | 'pow' | 'bang' | 'stamp' | 'click') => {
     // Audio context may be blocked by browser policy until user click, which is normal
   }
 };
-// ── Photos from public/photos/web ──
-interface Photo {
-  id: number
-  src: string
-  label: string
-}
-
-const PHOTOS: Photo[] = [
-  {
-    "id": 1,
-    "src": "/photos/web/MCS00113.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 2,
-    "src": "/photos/web/MCS00486.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 3,
-    "src": "/photos/web/MCS00734.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 4,
-    "src": "/photos/web/MCS01361.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 5,
-    "src": "/photos/web/MCS01446.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 6,
-    "src": "/photos/web/MCS01565.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 7,
-    "src": "/photos/web/MCS01588.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 8,
-    "src": "/photos/web/MCS01598.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 9,
-    "src": "/photos/web/MCS01616.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 10,
-    "src": "/photos/web/MCS01619.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 11,
-    "src": "/photos/web/MCS01630.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 12,
-    "src": "/photos/web/MCS02240.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 13,
-    "src": "/photos/web/MCS02341.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 14,
-    "src": "/photos/web/MCS02351.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 15,
-    "src": "/photos/web/MCS02401.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 16,
-    "src": "/photos/web/MCS02551.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 17,
-    "src": "/photos/web/MCS02708.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 18,
-    "src": "/photos/web/MCS02747.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 19,
-    "src": "/photos/web/MCS03220.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 20,
-    "src": "/photos/web/MCS03237.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 21,
-    "src": "/photos/web/MCS03264.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 22,
-    "src": "/photos/web/MCS03277.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 23,
-    "src": "/photos/web/MCS03308.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 24,
-    "src": "/photos/web/MCS03352.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 25,
-    "src": "/photos/web/MCS03543.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 26,
-    "src": "/photos/web/MCS03615.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 27,
-    "src": "/photos/web/MCS03804.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 28,
-    "src": "/photos/web/MCS03882.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 29,
-    "src": "/photos/web/MCS04202.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 30,
-    "src": "/photos/web/MCS04213.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 31,
-    "src": "/photos/web/MCS04257.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 32,
-    "src": "/photos/web/MCS04925.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 33,
-    "src": "/photos/web/MCS05021.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 34,
-    "src": "/photos/web/MCS05036.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 35,
-    "src": "/photos/web/MCS05143.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 36,
-    "src": "/photos/web/MCS05159.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 37,
-    "src": "/photos/web/MCS05177.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 38,
-    "src": "/photos/web/MCS05226.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 39,
-    "src": "/photos/web/MCS05230.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 40,
-    "src": "/photos/web/MCS05344.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 41,
-    "src": "/photos/web/MCS05389.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 42,
-    "src": "/photos/web/MCS05430.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 43,
-    "src": "/photos/web/MCS05432.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 44,
-    "src": "/photos/web/MCS05434.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 45,
-    "src": "/photos/web/MCS05448.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 46,
-    "src": "/photos/web/MCS05466.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 47,
-    "src": "/photos/web/MCS05527.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 48,
-    "src": "/photos/web/MCS05585.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 49,
-    "src": "/photos/web/MCS05620.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 50,
-    "src": "/photos/web/MCS05702.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 51,
-    "src": "/photos/web/MCS05747.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 52,
-    "src": "/photos/web/MCS05754.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 53,
-    "src": "/photos/web/MCS05788.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 54,
-    "src": "/photos/web/MCS05795.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 55,
-    "src": "/photos/web/MCS05807.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 56,
-    "src": "/photos/web/1.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 57,
-    "src": "/photos/web/2.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 58,
-    "src": "/photos/web/3.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 59,
-    "src": "/photos/web/4.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 60,
-    "src": "/photos/web/5.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 61,
-    "src": "/photos/web/6.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 62,
-    "src": "/photos/web/7.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 63,
-    "src": "/photos/web/8.webp",
-    "label": "Aarambh 26 Moment"
-  },
-  {
-    "id": 64,
-    "src": "/photos/web/9.webp",
-    "label": "Aarambh 26 Moment"
-  }
-];
-
-const col1Images = PHOTOS.slice(0, 16).map(p => p.src);
-const col2Images = PHOTOS.slice(16, 32).map(p => p.src);
-const col3Images = PHOTOS.slice(32, 48).map(p => p.src);
-const col4Images = PHOTOS.slice(48, 64).map(p => p.src);
 
 
 
 export default function Home() {
-  const router = useRouter();
-
-  const [galleryMounted, setGalleryMounted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, mins: 0, secs: 0 });
-  const [particles, setParticles] = useState<Particle[]>([]);
   const [introStarted, setIntroStarted] = useState(true);
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, mins: 0, secs: 0 });
+  const [hasRegistered, setHasRegistered] = useState(false);
+  const [activeSpectrum, setActiveSpectrum] = useState<number | null>(null);
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   // Generate Mario Animation Arrays for loading screen
   const NUM_SLICES = 5;
@@ -519,7 +183,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setGalleryMounted(true);
+    if (typeof window !== 'undefined') {
+      const regStatus = localStorage.getItem('aarambh_registered');
+      if (regStatus === 'true') setHasRegistered(true);
+    }
 
     const targetDate = new Date('2026-07-14T09:00:00').getTime();
     const interval = setInterval(() => {
@@ -566,6 +233,7 @@ export default function Home() {
     { label: 'Mins', valueKey: 'mins', bg: 'bg-brand-blue text-brand-cloud', rotate: '-rotate-1' },
     { label: 'Secs', valueKey: 'secs', bg: 'bg-brand-cloud text-brand-ink', rotate: 'rotate-2' },
   ];
+
 
 
   return (
@@ -707,21 +375,19 @@ export default function Home() {
       {/* Comic Magazine Cover Hero */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-28 px-4 overflow-hidden bg-brand-cloud text-brand-ink">
 
-        {/* Comic Pattern Backdrop */}
-        <div className="absolute inset-0 bg-halftone-black opacity-30 pointer-events-none" />
-
-        {/* Abstract comic background shapes */}
-        <div className="absolute top-12 left-12 w-64 h-64 bg-brand-pink/15 rounded-full blur-[80px] pointer-events-none" />
-        <div className="absolute bottom-20 right-20 w-[450px] h-[450px] bg-brand-orange/15 rounded-full blur-[100px] pointer-events-none" />
-
-        {/* Huge Tilted AARAMBH 26 Watermark */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12 w-[120vw] text-center opacity-[0.04]">
-            <h1 style={{ fontFamily: "var(--font-display)", fontSize: 'clamp(3rem, 8vw, 8rem)', fontWeight: 900, color: '#030404', lineHeight: 0.8, letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-              AARAMBH&apos;26
-            </h1>
-          </div>
+        {/* Dynamic Light Background Image */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+          <Image 
+            src="/hero-bg-light.png" 
+            alt="Dynamic comic background" 
+            fill 
+            className="object-cover opacity-80 mix-blend-darken" 
+            priority
+          />
         </div>
+
+        {/* Comic Pattern Backdrop for extra texture */}
+        <div className="absolute inset-0 bg-halftone-black opacity-15 pointer-events-none z-0 mix-blend-overlay" />
 
         {/* Draggable Pop-Art Stickers with synthesized audio triggers */}
         <div className="hidden lg:block absolute inset-0 z-10 pointer-events-none">
@@ -784,19 +450,19 @@ export default function Home() {
         >
           {/* Comic Magazine Header Band */}
           <div className="border-comic bg-brand-ink text-brand-cloud px-6 py-2.5 font-display text-xs font-black tracking-[0.25em] uppercase shadow-comic -rotate-1 mb-10 bg-halftone-cloud">
-            JK LAKSHMIPAT UNIVERSITY PRESENTS
+            JK LAKSHMIPAT UNIVERSITY PRESENTS • THE MEGA INDUCTION FEST
           </div>
 
           {/* Comic Styled Heading Stack */}
-          <div className="relative mb-6 sm:mb-8 select-none p-2 sm:p-3 max-w-full text-center flex justify-center">
+          <div className="relative mb-8 select-none p-3 max-w-full">
             {/* Outline back text */}
-            <h1 className="font-display text-5xl sm:text-7xl md:text-[6.5rem] lg:text-[8rem] font-black uppercase leading-[1.1] sm:leading-none tracking-tighter text-outline-pink select-none break-words max-w-[95vw]">
+            <h1 className="font-display text-6xl sm:text-7xl md:text-[6.5rem] lg:text-[8rem] font-black uppercase leading-none tracking-tighter text-outline-pink select-none">
               BOLD & BEYOND
             </h1>            {/* Centered Primary Logo */}
             <div className="absolute inset-0 flex items-center justify-center p-2 mt-2 z-20 perspective-[1500px]">
               <div className="relative w-full max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-3xl group">
                 {/* Base logo card with drop shadow */}
-                <div className="relative z-10 w-full bg-brand-cloud border-comic rounded-xl p-4 sm:p-8 drop-shadow-[6px_6px_0px_#030404] sm:drop-shadow-[10px_10px_0px_#030404] flex items-center justify-center perspective-[1500px] transform-style-3d min-h-[100px] sm:min-h-[200px] md:min-h-[260px]">
+                <div className="relative z-10 w-full bg-brand-cloud border-comic rounded-xl p-6 sm:p-8 drop-shadow-[10px_10px_0px_#030404] flex items-center justify-center perspective-[1500px] transform-style-3d min-h-[140px] sm:min-h-[200px] md:min-h-[260px]">
                                     {loadingComplete && (
                     <>
                       {/* Logo Container Fill Animation */}
@@ -852,7 +518,7 @@ export default function Home() {
           </div>
 
           {/* Narrative Dialogue Box */}
-          <div className="border-comic bg-brand-ink text-brand-cloud p-4 sm:p-6 rounded-xl max-w-4xl w-[95%] sm:w-full shadow-comic rotate-1 bg-halftone-cloud mb-10 mx-auto">
+          <div className="border-comic bg-brand-ink text-brand-cloud p-6 rounded-xl max-w-4xl w-full shadow-comic rotate-1 bg-halftone-cloud mb-10 mx-auto">
             <p className="font-display font-black text-sm sm:text-base leading-relaxed tracking-wide uppercase text-center">
               <span className="text-brand-pink text-lg">AARAMBH &mdash; THE BEGINNING OF SOMETHING GREATER. </span>
               Where strangers become friends and dreams find direction.
@@ -861,11 +527,11 @@ export default function Home() {
           </div>
 
           {/* Countdown Clock Panel */}
-          <div className="grid grid-cols-4 gap-2 sm:gap-4 mb-12 w-full max-w-md text-brand-cloud px-2 sm:px-0">
+          <div className="grid grid-cols-4 gap-3 sm:gap-4 mb-12 w-full max-w-md text-brand-cloud">
             {countdownBlocks.map((block) => (
               <div
                 key={block.label}
-                className={`p-2 sm:p-4 border-comic rounded-lg shadow-comic-sm sm:shadow-comic ${block.bg} ${block.rotate} transition-transform hover:scale-105`}
+                className={`p-3 sm:p-4 border-comic rounded-lg shadow-comic ${block.bg} ${block.rotate} transition-transform hover:scale-105`}
               >
                 <div className="relative h-8 sm:h-10 overflow-hidden flex items-center justify-center w-full">
                   <AnimatePresence mode="popLayout">
@@ -888,6 +554,32 @@ export default function Home() {
             ))}
           </div>
 
+          {/* Action CTAs */}
+          <div className="flex flex-wrap justify-center gap-6 z-20 relative">
+            {!hasRegistered ? (
+              <div className="relative">
+                {/* Speech Bubble floating callout */}
+                <div className="absolute -top-16 left-1/2 -translate-x-1/2 comic-bubble px-4 py-2 font-display text-xs font-black uppercase whitespace-nowrap animate-bounce z-30">
+                  ACTIVATE YOUR ACCESS PASS! ⚡
+                </div>
+
+                <Link href="/register">
+                  <motion.button 
+                    whileHover={{ scale: 1.05, rotate: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onHoverStart={() => playSynthSound('click')}
+                    className="comic-interactive border-comic py-4 px-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all font-display font-black text-lg uppercase tracking-wider text-brand-ink bg-brand-orange hover:bg-brand-pink hover:text-brand-cloud rounded-lg"
+                  >
+                    REGISTER NOW <ArrowRight className="inline shrink-0 ml-1.5" size={24} />
+                  </motion.button>
+                </Link>
+              </div>
+            ) : (
+              <div className="bg-brand-blue text-brand-cloud border-comic shadow-comic px-8 py-3.5 rounded-lg font-display font-black text-sm uppercase tracking-wider flex items-center gap-2">
+                <ShieldCheck size={20} className="text-brand-orange animate-bounce" /> ACCESS GRANTED!
+              </div>
+            )}
+          </div>
         </motion.div>
       </section>
 
@@ -914,465 +606,134 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Torn paper visual separation */}
-      <TornPaperDivider color="fill-brand-ink" flip={true} />
 
 
       {/* About Section wrapper */}
       <section className="w-full z-10 bg-brand-ink">
         <AboutSection />
       </section>
-      {/* Memories of 2025 Gallery Showcase Section */}
-      <section className="w-full relative z-10 bg-brand-cloud border-t-4 border-brand-ink text-brand-ink">
-        <style dangerouslySetInnerHTML={{
-          __html: `
 
+      {/* Exclusive student gateway panels */}
+      <section className="py-24 px-6 w-full max-w-7xl relative z-10 flex flex-col items-center">
+        <span className="px-4 py-1.5 border-comic-thin bg-brand-blue text-brand-cloud font-display text-xs font-black tracking-widest uppercase -rotate-2 mb-4">
+          PORTAL PASS
+        </span>
+        <h2 className="text-center font-display text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-cloud mb-4">
+          THE STUDENT GATEWAY
+        </h2>
+        <p className="text-center text-brand-cloud/60 max-w-xl mb-16 text-sm">
+          Unlock your schedules and cohorts. Join your assigned teams once registration validation completes.
+        </p>
 
-          .gl-root {
-            width: 100%;
-            height: 980px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            background: #F5F1E5;
-            perspective: 1200px;
-          }
-
-          /* ── ENTER MAGIC CARD ── */
-          .gl-card {
-            position: relative;
-            z-index: 10;
-            width: clamp(280px, 82vw, 390px);
-            background: #F5F1E5;
-            border: 3.5px solid #030404;
-            border-radius: 20px;
-            padding: 32px 28px;
-            text-align: center;
-            box-shadow: 12px 12px 0px 0px #030404;
-            overflow: visible;
-            transform-style: flat;
-            will-change: transform;
-          }
-
-          /* sliding photo columns */
-          .gl-slider-column {
-            position: absolute;
-            top: -10%;
-            width: 145px;
-            height: 120%;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
-            z-index: 2;
-            pointer-events: none;
-            opacity: 0.85;
-          }
-
-          .gl-slider-img-container {
-            width: 100%;
-            height: 195px;
-            position: relative;
-            border: 3px solid #030404;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 5px 5px 0px 0px #030404;
-            background: #030404;
-          }
-
-          .gl-slider-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-          }
-
-          @keyframes slideUp {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-          }
-
-          @keyframes slideDown {
-            0% { transform: translateY(-50%); }
-            100% { transform: translateY(0); }
-          }
-
-          .gl-slider-track-up {
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
-            animation: slideUp 24s linear infinite;
-          }
-
-          .gl-slider-track-down {
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
-            animation: slideDown 24s linear infinite;
-          }
-
-          @media (max-width: 1200px) {
-            .gl-slider-column.inner {
-              display: none !important;
-            }
-          }
-
-          @media (max-width: 768px) {
-            .gl-slider-column {
-              display: flex !important;
-              flex-direction: row !important;
-              width: 250% !important;
-              height: 105px !important;
-              left: -75% !important;
-              right: auto !important;
-              top: auto !important;
-              gap: 12px !important;
-              opacity: 0.7 !important;
-            }
-            
-            /* Position columns as horizontal rows */
-            .gl-slider-column.left:not(.inner) {
-              top: 4% !important;
-            }
-            .gl-slider-column.left.inner {
-              display: flex !important;
-              top: 17% !important;
-            }
-            .gl-slider-column.right.inner {
-              display: flex !important;
-              bottom: 17% !important;
-            }
-            .gl-slider-column.right:not(.inner) {
-              bottom: 4% !important;
-            }
-
-            .gl-slider-img-container {
-              width: 140px !important;
-              height: 95px !important;
-              box-shrink: 0 !important;
-              flex-shrink: 0 !important;
-              box-shadow: 3px 3px 0px 0px #030404 !important;
-            }
-
-            .gl-slider-track-up {
-              display: flex !important;
-              flex-direction: row !important;
-              gap: 12px !important;
-              animation: slideLeft 22s linear infinite !important;
-            }
-
-            .gl-slider-track-down {
-              display: flex !important;
-              flex-direction: row !important;
-              gap: 12px !important;
-              animation: slideRight 22s linear infinite !important;
-            }
-          }
-
-          @keyframes slideLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-
-          @keyframes slideRight {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
-          }
-
-          /* Starburst badge */
-          .gl-starburst {
-            position: absolute;
-            width: 72px;
-            height: 72px;
-            background: #FF9A00;
-            border: 2px solid #030404;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: starSpin 10s linear infinite;
-          }
-          @keyframes starSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-
-          .gl-starburst-text {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 10px;
-            color: #030404;
-            letter-spacing: 0.05em;
-            text-align: center;
-            line-height: 1.1;
-            animation: starSpin 10s linear infinite reverse;
-          }
-
-          .gl-devanagari {
-            font-family: 'Tiro Devanagari Hindi', serif;
-            font-size: 1.1rem;
-            color: #030404;
-            margin-bottom: 6px;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-          }
-
-          .gl-eyebrow {
-            font-family: var(--font-display);
-            font-size: 0.75rem;
-            font-weight: 800;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: #FF188C;
-            margin-bottom: 18px;
-          }
-
-          .gl-heading {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 7vw, 3rem);
-            font-weight: 900;
-            color: #030404;
-            line-height: 1.0;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-          }
-          
-          .gl-heading-highlight {
-            color: #F5F1E5;
-            text-shadow: 
-              2px 2px 0 #FF188C,
-              -2px -2px 0 #FF188C,
-              2px -2px 0 #FF188C,
-              -2px 2px 0 #FF188C,
-              4px 4px 0 #030404;
-          }
-
-          .gl-divider {
-            width: 50px;
-            height: 4px;
-            background: #030404;
-            border-radius: 99px;
-            margin: 18px auto 18px;
-          }
-
-          .gl-sub {
-            font-family: var(--font-display);
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #030404;
-            letter-spacing: 0.02em;
-            line-height: 1.5;
-            margin-bottom: 24px;
-          }
-
-          /* Begin Experience button */
-          .gl-cta {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-size: 0.85rem;
-            font-weight: 900;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #F5F1E5;
-            background: #FF188C;
-            border: 3.5px solid #030404;
-            border-radius: 12px;
-            padding: 14px 28px;
-            text-decoration: none;
-            cursor: pointer;
-            box-shadow: 5px 5px 0px 0px #030404;
-            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
-          }
-          .gl-cta:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 8px 8px 0px 0px #030404;
-            background: #FF9A00;
-            color: #030404;
-          }
-          .gl-cta:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px 0px #030404;
-          }
-
-          .gl-corner-tag {
-            position: absolute;
-            font-family: var(--font-display);
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: #030404;
-            pointer-events: none;
-            z-index: 5;
-          }
-
-          .gl-card-topbar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 10px;
-            background: #FF9A00;
-            border-bottom: 3.5px solid #030404;
-          }
-        `}} />
-
-        <div className="gl-root">
-          {/* Column 1: Left Outer (Slides Up) */}
-          <div className="gl-slider-column left" style={{ left: '1.5%' }}>
-            <div className="gl-slider-track-up">
-              {[...col1Images, ...col1Images].map((src, i) => (
-                <div key={`col1-${i}`} className="gl-slider-img-container">
-                  <img src={src} className="gl-slider-image" alt="Aarambh" />
-                </div>
-              ))}
+        {!hasRegistered ? (
+          <div className="w-full max-w-4xl border-comic bg-brand-cloud text-brand-ink p-12 text-center flex flex-col items-center rounded-xl shadow-comic bg-halftone-black relative overflow-hidden">
+            <div className="absolute top-4 right-4 text-[10px] font-mono font-black text-brand-ink/50 bg-brand-pink/15 px-2 py-0.5 border-comic-thin rounded">
+              SYSTEM: CRYPTO-LOCKED
             </div>
-          </div>
 
-          {/* Column 2: Left Inner (Slides Down) */}
-          <div className="gl-slider-column left inner" style={{ left: '12.5%' }}>
-            <div className="gl-slider-track-down">
-              {[...col2Images, ...col2Images].map((src, i) => (
-                <div key={`col2-${i}`} className="gl-slider-img-container">
-                  <img src={src} className="gl-slider-image" alt="Aarambh" />
-                </div>
-              ))}
+            {/* Padlock icon in a comic badge */}
+            <div className="relative p-6 mb-6 bg-brand-pink border-comic shadow-comic-sm rounded-lg text-brand-cloud animate-pulse rotate-3">
+              <Lock size={40} />
             </div>
-          </div>
 
-          {/* Column 3: Right Inner (Slides Up) */}
-          <div className="gl-slider-column right inner" style={{ right: '12.5%' }}>
-            <div className="gl-slider-track-up">
-              {[...col3Images, ...col3Images].map((src, i) => (
-                <div key={`col3-${i}`} className="gl-slider-img-container">
-                  <img src={src} className="gl-slider-image" alt="Aarambh" />
+            <h3 className="text-2xl font-display font-black mb-2 uppercase tracking-wide">GATEWAY LOCKED</h3>
+            <p className="text-brand-ink/75 max-w-md text-xs sm:text-sm mb-8 leading-relaxed font-bold">
+              KAPOW! THIS AREA IS RESTRICTED. COMPLETE YOUR REGISTRATION ENROLLMENT TO ACTIVATE YOUR ACCESS KEYS.
+            </p>
+
+            <Link href="/register">
+              <button className="comic-interactive border-comic shadow-comic px-8 py-3.5 bg-brand-pink text-brand-cloud font-display font-black text-xs uppercase tracking-wider rounded-lg">
+                ACTIVATE ACCOUNT KEYS
+              </button>
+            </Link>
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl"
+          >
+            {/* Comic panel 1 */}
+            <div className="p-8 border-comic bg-brand-cloud text-brand-ink rounded-xl shadow-comic hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-[10px] font-black tracking-widest uppercase bg-brand-blue text-brand-cloud px-3 py-1 border-comic-thin rounded">
+                    SQUAD CHAT
+                  </span>
+                  <Unlock className="text-brand-blue" size={18} />
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 4: Right Outer (Slides Down) */}
-          <div className="gl-slider-column right" style={{ right: '1.5%' }}>
-            <div className="gl-slider-track-down">
-              {[...col4Images, ...col4Images].map((src, i) => (
-                <div key={`col4-${i}`} className="gl-slider-img-container">
-                  <img src={src} className="gl-slider-image" alt="Aarambh" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-
-
-          {/* Main Content Container */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10, padding: '0 20px', textAlign: 'center' }}>
-
-            {/* Title Section */}
-            {galleryMounted && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  maxWidth: '650px',
-                  marginBottom: '32px'
-                }}
-              >
-                <h2 style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: 'clamp(2.0rem, 5vw, 3rem)',
-                  fontWeight: 800,
-                  color: '#FF9A00',
-                  marginBottom: '16px',
-                  textShadow: '2px 2px 0px #030404',
-                  letterSpacing: '-0.02em'
-                }}>
-                  Memories of 2025
-                </h2>
-                <p style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
-                  fontWeight: 600,
-                  color: '#030404',
-                  lineHeight: 1.6
-                }}>
-                  Experience the best moments of Aarambh 2025 with our curated memories.
+                <h3 className="text-2xl font-display font-black mb-3 uppercase tracking-tight">
+                  Join Peer Cohort
+                </h3>
+                <p className="text-brand-ink/70 text-xs sm:text-sm leading-relaxed font-bold mb-6">
+                  Connect with your assignees in the official Aarambh chat server. Network with seniors and organize squad taskboards!
                 </p>
-              </motion.div>
-            )}
+              </div>
+              <button className="w-full py-3.5 bg-brand-blue border-comic shadow-comic-sm text-brand-cloud font-display font-black text-xs uppercase tracking-widest rounded-lg comic-interactive">
+                JOIN DISCORD SQUAD
+              </button>
+            </div>
 
-            {/* Main Neo-Brutalism Card */}
-            {galleryMounted && (
-              <motion.div
-                className="gl-card"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <div className="gl-card-topbar" />
-
-                {/* Content Container */}
-                <div style={{ position: 'relative', zIndex: 10 }}>
-                  {/* Devanagari */}
-                  <div className="gl-devanagari">आरम्भ '२६</div>
-
-                  {/* Main heading */}
-                  <h1 className="gl-heading" style={{ marginBottom: '32px' }}>
-                    ENTER THE <br />
-                    <span className="gl-heading-highlight">GALLERY</span>
-                  </h1>
-
-                  {/* CTA - Navigates to /gallery */}
-                  <div style={{ display: 'inline-block', position: 'relative', zIndex: 100, marginTop: '8px' }}>
-                    <Link href="/gallery" className="gl-cta">
-                      Begin Experience →
-                    </Link>
-                  </div>
+            {/* Comic panel 2 */}
+            <div className="p-8 border-comic bg-brand-cloud text-brand-ink rounded-xl shadow-comic hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-[10px] font-black tracking-widest uppercase bg-brand-orange text-brand-ink px-3 py-1 border-comic-thin rounded">
+                    ITINERARY
+                  </span>
+                  <Unlock className="text-brand-orange" size={18} />
                 </div>
-              </motion.div>
-            )}
-          </div>
-        </div>
+                <h3 className="text-2xl font-display font-black mb-3 uppercase tracking-tight">
+                  TIMETABLE FLOW
+                </h3>
+                <p className="text-brand-ink/70 text-xs sm:text-sm leading-relaxed font-bold mb-6">
+                  View scheduled lecture rooms, project workshop assignments, and cultural evening timelines.
+                </p>
+              </div>
+              <Link href="/schedule">
+                <button className="w-full py-3.5 bg-brand-orange border-comic shadow-comic-sm text-brand-ink font-display font-black text-xs uppercase tracking-widest rounded-lg comic-interactive">
+                  LAUNCH SCHEDULE SHEET
+                </button>
+              </Link>
+            </div>
+          </motion.div>
+        )}
       </section>
 
-      {/* Static Registration Section */}
-      <section className="py-24 px-6 w-full max-w-5xl pb-32 relative z-10 mx-auto">
+      {/* Comic Book Ad Banner Style Newsletter */}
+      <section className="py-24 px-6 w-full max-w-5xl pb-32 relative z-10">
         <div className="border-comic bg-brand-orange text-brand-ink shadow-comic-lg bg-halftone-black p-8 sm:p-12 md:p-16 rounded-xl text-center relative overflow-hidden">
           {/* Action starburst backing design */}
           <div className="absolute top-2 left-2 w-16 h-16 border-comic-thin bg-brand-pink text-brand-cloud font-display font-black text-[10px] uppercase tracking-tighter flex items-center justify-center rotate-[-12deg] shadow-comic-sm">
-            REG
+            NEWS!
           </div>
 
-          <span className="relative z-10 px-3 py-1 bg-brand-ink text-brand-cloud font-display text-[10px] font-black uppercase tracking-widest rounded-md">
-            OFFICIAL REGISTRATION GATEWAY
+          <span className="relative z-10 px-3 py-1 bg-brand-ink text-brand-cloud font-display text-[10px] font-black uppercase tracking-widest">
+            AARAMBH DISPATCH
           </span>
-
           <h2 className="text-3xl md:text-5xl font-display font-black uppercase mb-4 tracking-tight mt-6">
-            COMPLETE YOUR REGISTRATION!
+            SUBSCRIBE & STAY TUNED!
           </h2>
           <p className="text-brand-ink/80 text-xs sm:text-sm mb-10 max-w-md mx-auto leading-relaxed font-bold uppercase">
-            COMPLETE YOUR ONLINE REGISTRATION AND SECURE YOUR SEAT FOR AARAMBH &apos;26. FULL ENROLLMENT GRANTS ACCESS TO ALL KEYNOTES, HANDS-ON WORKSHOPS & FESTIVAL ACTIVITIES!
+            GET THE OFFICIAL BROADCASTS DELIVERED TO YOUR INBOX. ANNOUNCEMENTS, KEYNOTE SCHEDULES, AND VENUE ASSIGNMENTS!
           </p>
-          <div className="flex justify-center relative z-10">
-            <Link href="/register">
-              <motion.button 
-                whileHover={{ scale: 1.05, rotate: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="comic-interactive border-comic py-4 px-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all font-display font-black text-lg uppercase tracking-wider text-brand-ink bg-brand-pink text-brand-cloud rounded-lg cursor-pointer"
-              >
-                REGISTER ONLINE NOW →
-              </motion.button>
-            </Link>
-          </div>
+
+          <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto relative z-10">
+            <input
+              type="email"
+              placeholder="ENTER.YOUR.EMAIL@HERE.COM"
+              className="bg-brand-cloud border-comic text-brand-ink placeholder:text-brand-ink/40 font-mono text-sm font-bold focus:outline-none focus:bg-white transition-colors flex-grow shadow-inner uppercase tracking-wider p-3 rounded-lg"
+              required
+              suppressHydrationWarning={true}
+            />
+            <button
+              type="submit"
+              className="py-3.5 px-8 bg-brand-ink text-brand-cloud font-display font-black text-xs uppercase tracking-widest rounded-lg comic-interactive border-2 border-brand-cloud shadow-comic-sm"
+            >
+              SUBSCRIBE NOW
+            </button>
+          </form>
         </div>
       </section>
     </main>

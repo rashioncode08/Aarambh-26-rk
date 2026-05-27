@@ -6,46 +6,29 @@ import { ArrowRight } from 'lucide-react';
 export default function Hero() {
   return (
     <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-brand-cloud py-20">
-      {/* Aurora Mesh Fluid Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {/* Base light background */}
-        <div className="absolute inset-0 bg-brand-cloud" />
-
-        {/* Deep sweeping base - Pink */}
-        <motion.div
-          className="absolute -top-[10%] -left-[10%] w-[70%] h-[80%] rounded-full opacity-[0.2]"
-          style={{ background: '#FF188C', filter: 'blur(140px)' }}
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        />
+      {/* Clean Light Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 bg-[#FAFAFA]">
         
-        {/* Secondary subtle ribbon - Blue */}
-        <motion.div
-          className="absolute top-[20%] right-[10%] w-[50%] h-[70%] rounded-full opacity-[0.15]"
-          style={{ background: '#0D21DD', filter: 'blur(150px)' }}
-          animate={{
-            x: [0, -40, 0],
-            y: [0, -20, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        />
+        {/* Soft elegant gradient mesh */}
+        <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full opacity-[0.4] bg-gradient-to-br from-brand-pink/20 to-brand-orange/20 blur-[100px]" />
+        <div className="absolute top-[20%] -right-[10%] w-[50%] h-[70%] rounded-full opacity-[0.3] bg-gradient-to-tr from-brand-blue/20 to-transparent blur-[120px]" />
         
-        {/* Architectural Grid Overlay */}
+        {/* Subtle grid pattern */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-[0.05]" 
+          className="absolute inset-0 pointer-events-none opacity-[0.4]" 
           style={{
-            backgroundImage: `linear-gradient(to right, #030404 1px, transparent 1px), linear-gradient(to bottom, #030404 1px, transparent 1px)`,
-            backgroundSize: '4rem 4rem'
+            backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)`,
+            backgroundSize: '3rem 3rem'
           }}
         />
 
-        {/* Halftone grid overlay */}
-        <div className="absolute inset-0 bg-halftone-black opacity-10 mix-blend-overlay" />
+        {/* Soft noise overlay for texture */}
+        <div 
+          className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none" 
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+          }}
+        />
       </div>
 
 

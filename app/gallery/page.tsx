@@ -472,11 +472,8 @@ export default function GalleryLanding() {
 
     const tick = () => {
       try {
-        // Auto-scroll continuously if no image is open in the lightbox
-        const isLightboxOpen = document.querySelector('.gp-lb-overlay') !== null
-        if (!isLightboxOpen) {
-          targetZOffsetRef.current += 1.8 // Auto forward speed
-        }
+        // Auto-scroll removed to make gallery scrolling entirely manual
+
 
         const diff = targetZOffsetRef.current - zOffsetRef.current
         zOffsetRef.current += diff * 0.08

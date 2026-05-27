@@ -110,11 +110,15 @@ export default function Navbar() {
 
           {/* Mobile menu toggle */}
           <button
-            className="md:hidden text-brand-cloud p-1 hover:text-brand-pink transition-colors relative"
+            className={`md:hidden border-2 border-brand-ink p-1.5 active:translate-y-0.5 transition-all shadow-[2px_2px_0px_0px_#030404] rounded-md ${
+              isMobileMenuOpen 
+                ? 'bg-brand-pink text-brand-cloud shadow-none' 
+                : 'bg-brand-orange text-brand-ink'
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
@@ -122,32 +126,42 @@ export default function Navbar() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              transition={{ duration: 0.2 }}
-              className="md:hidden absolute top-[calc(100%+0.75rem)] left-0 w-full bg-brand-ink/95 backdrop-blur-xl border border-brand-pink/20 rounded-2xl p-6 flex flex-col gap-4 shadow-2xl"
+              initial={{ opacity: 0, y: -15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="md:hidden absolute top-[calc(100%+0.75rem)] left-0 w-full bg-brand-cloud border-4 border-brand-ink p-6 flex flex-col gap-3 shadow-[8px_8px_0px_0px_#030404] rounded-xl z-50 text-brand-ink"
             >
+              {/* Comic Banner tag inside the dropdown */}
+              <div className="border-comic-thin bg-brand-ink text-brand-cloud px-3 py-1 font-display text-[9px] font-black tracking-widest uppercase self-start rounded -rotate-2 -mt-1 mb-2">
+                AARAMBH MENU
+              </div>
+
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`text-sm font-bold tracking-widest uppercase transition-colors py-2 border-b border-brand-cloud/5 ${pathname === link.href ? 'text-brand-pink' : 'text-brand-cloud/80 hover:text-brand-pink'
-                    }`}
+                  className={`text-sm font-display font-black tracking-wider uppercase transition-all py-2.5 px-3 border-2 border-transparent hover:border-brand-ink hover:bg-brand-orange hover:-translate-y-0.5 rounded-lg flex items-center justify-between group ${
+                    pathname === link.href 
+                      ? 'text-brand-pink border-brand-ink bg-brand-pink/5' 
+                      : 'text-brand-ink hover:text-brand-ink'
+                  }`}
                 >
-                  {link.name}
+                  <span>{link.name}</span>
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity text-brand-ink font-mono text-xs">→</span>
                 </Link>
               ))}
 
               <Link
                 href="/register"
-                className={`w-full text-center py-3 rounded-full font-bold text-xs uppercase tracking-widest transition-colors shadow-lg mt-2 ${pathname?.startsWith('/register')
-                  ? 'text-brand-cloud bg-brand-blue'
-                  : 'text-brand-cloud bg-brand-pink hover:bg-brand-blue'
-                  }`}
+                className={`w-full text-center py-3.5 border-4 border-brand-ink font-display font-black text-xs uppercase tracking-widest transition-all mt-4 shadow-[4px_4px_0px_0px_#030404] active:translate-y-1 active:shadow-none hover:bg-brand-pink hover:text-brand-cloud rounded-lg ${
+                  pathname?.startsWith('/register')
+                    ? 'text-brand-cloud bg-brand-blue'
+                    : 'text-brand-ink bg-brand-orange'
+                }`}
               >
-                Register
+                Registration
               </Link>
             </motion.div>
           )}

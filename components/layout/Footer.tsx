@@ -163,8 +163,8 @@ export default function Footer() {
   return (
     <footer className="relative bg-white border-t-4 border-brand-ink py-16 px-6 overflow-hidden select-none">
       
-      {/* 4-Column Neobrutalist Grid */}
-      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+      {/* 3-Column Neobrutalist Grid */}
+      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
         
         {/* COLUMN 1: CONTACT US */}
         <div className="space-y-4">
@@ -172,7 +172,7 @@ export default function Footer() {
             <h4 className="text-brand-ink font-display font-black text-sm uppercase tracking-widest">
               Contact Us
             </h4>
-            <div className="w-12 h-1 bg-brand-orange mt-2" />
+            <div className="w-12 h-1 bg-brand-orange mt-2 rounded-full" />
           </div>
           
           <ul className="space-y-4 text-xs font-mono text-brand-ink leading-relaxed font-bold">
@@ -203,7 +203,7 @@ export default function Footer() {
             <h4 className="text-brand-ink font-display font-black text-sm uppercase tracking-widest">
               Quick Links
             </h4>
-            <div className="w-12 h-1 bg-brand-orange mt-2" />
+            <div className="w-12 h-1 bg-brand-orange mt-2 rounded-full" />
           </div>
           
           <ul className="grid grid-cols-1 gap-2 text-xs font-mono text-brand-ink/80 font-bold">
@@ -261,7 +261,7 @@ export default function Footer() {
             <h4 className="text-brand-ink font-display font-black text-sm uppercase tracking-widest">
               Follow Us
             </h4>
-            <div className="w-12 h-1 bg-brand-orange mt-2" />
+            <div className="w-12 h-1 bg-brand-orange mt-2 rounded-full" />
           </div>
           
           <div className="flex gap-3">
@@ -296,22 +296,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* COLUMN 4: CAMPUS CARD */}
-        <div className="flex items-center justify-center lg:justify-end">
-          <div className="bg-white border-4 border-brand-ink shadow-[6px_6px_0px_0px_#FF188C] rounded-lg p-2.5 max-w-[240px] w-full transform hover:rotate-1 transition-transform duration-250">
-            <div className="relative aspect-video w-full rounded-md overflow-hidden border-2 border-brand-ink">
-              <Image
-                src="/aarambh-2025-poster.jpg"
-                alt="Aarambh '26 Poster View"
-                fill
-                sizes="(max-w-240px) 100vw, 240px"
-                className="object-cover grayscale hover:grayscale-0 transition-all duration-300"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-
       </div>
 
       {/* LOCATION TITLE & MAP CONTAINER */}
@@ -320,12 +304,12 @@ export default function Footer() {
           <h3 className="text-2xl font-display font-black tracking-widest uppercase text-brand-ink">
             Location
           </h3>
-          <div className="w-24 h-1 bg-brand-orange mx-auto" />
+          <div className="w-24 h-1 bg-brand-orange mx-auto rounded-full" />
         </div>
 
         <div className="w-full border-4 border-brand-ink shadow-[8px_8px_0px_0px_#030404] rounded-lg overflow-hidden h-80 mb-10 transform hover:scale-[1.002] transition-transform duration-250">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.1068800262106!2d75.64717947625807!3d26.836594263152028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c59ea11e5491b%3A0x2f90a9caad95e1e1!2sJK%20Lakshmipat%20University!5e0!3m2!1sen!2sin!4v1716808795908!5m2!1sen!2sin"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.1052887370965!2d75.64772927502109!3d26.83660327669258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4af4fe68f403%3A0x3bf05f95df22b8c4!2sJK%20Lakshmipat%20University!5e0!3m2!1sen!2sin!4v1779876968774!5m2!1sen!2sin"
             width="100%"
             height="100%"
             style={{ border: 0 }}
