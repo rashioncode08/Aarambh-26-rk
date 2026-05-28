@@ -290,3 +290,97 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-brand-orange);
 }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* HERO SECTION — Torn Paper Edges + TV Video Overlay         */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* Torn paper edge containers */
+.hero-torn-edge-top {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  user-select: none;
+  pointer-events: none;
+  background-color: var(--color-brand-cloud);
+  margin-top: -1px;
+}
+
+.hero-torn-edge-bottom {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  user-select: none;
+  pointer-events: none;
+  background-color: var(--color-brand-orange);
+  margin-top: -1px;
+}
+
+.hero-torn-svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 45px;
+}
+
+@media (min-width: 768px) {
+  .hero-torn-svg {
+    height: 65px;
+  }
+}
+
+/* TV Collage Container — positions the video behind the TV image */
+.hero-tv-container {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+}
+
+.hero-tv-image {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Video positioned precisely over the TV screen area */
+.hero-tv-video {
+  position: absolute;
+  z-index: 5;
+  object-fit: cover;
+  border-radius: 3px;
+  /* These values map to the screen area within meow.png */
+  top: 30.5%;
+  left: 24%;
+  width: 52%;
+  height: 36%;
+}
+
+/* CRT TV scan-line overlay for TV screen area */
+.hero-tv-scanlines {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  /* Match the video coordinates precisely */
+  top: 30.5%;
+  left: 24%;
+  width: 52%;
+  height: 36%;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  border-radius: 3px;
+}
+
+/* Responsive TV sizing */
+@media (max-width: 767px) {
+  .hero-tv-container {
+    max-width: 380px;
+  }
+}

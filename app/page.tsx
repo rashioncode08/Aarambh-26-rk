@@ -7,6 +7,13 @@ import { Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import AboutSection from '@/components/about';
+import { Cabin_Sketch } from 'next/font/google';
+
+const cabinSketch = Cabin_Sketch({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 interface TimeLeft {
   days: number;
@@ -507,57 +514,14 @@ export default function Home() {
   const [galleryMounted, setGalleryMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, mins: 0, secs: 0 });
   const [particles, setParticles] = useState<Particle[]>([]);
-  const [introStarted, setIntroStarted] = useState(false);
-  const [loadingComplete, setLoadingComplete] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Show loading screen animation on every page load and reload
   useEffect(() => {
     setIsMounted(true);
-    setIntroStarted(true);
-    setLoadingComplete(false);
   }, []);
 
-  // Generate Mario Animation Arrays for loading screen
-  const NUM_SLICES = 5;
-  const TOTAL_DURATION = 5.0; // 1.0s per slice
-  
-  const marioLeft: string[] = ['-10%'];
-  const marioLeftTimes: number[] = [0];
-  const marioY: number[] = [0];
-  const marioYTimes: number[] = [0];
-  
-  for (let i = 0; i < NUM_SLICES; i++) {
-    const hitTimeSec = (i + 1) * 1.0; 
-    const hitNorm = hitTimeSec / TOTAL_DURATION; 
-    
-    marioLeft.push(`${(i * 20) + 10}%`);
-    marioLeftTimes.push(hitNorm);
-    
-    const jumpStart = Math.max(0, hitNorm - 0.05);
-    const jumpEnd = Math.min(1, hitNorm + 0.05);
-    marioY.push(0, -80, 0);
-    marioYTimes.push(jumpStart, hitNorm, jumpEnd);
-  }
 
-  // Mario Intro Animation Sequence
-  useEffect(() => {
-    if (!introStarted || loadingComplete) return;
-    
-    const timeouts = Array.from({ length: 5 }).map((_, i) => {
-      const hitTimeMs = (i + 1) * 1000;
-      return setTimeout(() => playSynthSound('bang'), hitTimeMs - 100); 
-    });
-    
-    const completeTimeout = setTimeout(() => {
-      setLoadingComplete(true);
-    }, TOTAL_DURATION * 1000 + 500);
 
-    return () => {
-      timeouts.forEach(clearTimeout);
-      clearTimeout(completeTimeout);
-    };
-  }, [introStarted, loadingComplete]);
 
   // Function to create comic dot explosion particles
   const spawnParticles = (x: number, y: number) => {
@@ -610,59 +574,54 @@ export default function Home() {
     };
   }, []);
 
-  const stickers = [
-    {
-      src: "/images/july_14_21.webp",
-      alt: "14-21 July Sticker",
-      type: "stamp",
-      top: "16%",
-      right: "6%",
-      width: 220,
-      height: 220,
-      rotate: "6deg",
-      floatDelay: 0.7,
-    },
-    {
-      src: "/images/edition_2026.webp",
-      alt: "2026 Edition Sticker",
-      type: "pow",
-      top: "14%",
-      left: "5%",
-      width: 230,
-      height: 230,
-      rotate: "-8deg",
-      floatDelay: 0,
-    },
-    {
-      src: "/images/first_step.webp",
-      alt: "First Step Sticker",
-      type: "bang",
-      bottom: "23%",
-      left: "6%",
-      width: 240,
-      height: 120,
-      rotate: "-5deg",
-      floatDelay: 1.4,
-    },
-    {
-      src: "/images/next_dimension.webp",
-      alt: "Next Dimension Sticker",
-      type: "boom",
-      bottom: "20%",
-      right: "6%",
-      width: 260,
-      height: 130,
-      rotate: "7deg",
-      floatDelay: 2.1,
-    },
-  ];
+
 
 
   const countdownBlocks = [
-    { label: 'Days', valueKey: 'days', bg: 'bg-brand-orange text-brand-ink', rotate: '-rotate-2' },
-    { label: 'Hours', valueKey: 'hours', bg: 'bg-brand-pink text-brand-cloud', rotate: 'rotate-3' },
-    { label: 'Mins', valueKey: 'mins', bg: 'bg-brand-blue text-brand-cloud', rotate: '-rotate-1' },
-    { label: 'Secs', valueKey: 'secs', bg: 'bg-brand-cloud text-brand-ink', rotate: 'rotate-2' },
+    { 
+      label: 'DAYS', 
+      valueKey: 'days', 
+      bg: '#fbc5db', 
+      gridColor: 'rgba(255, 24, 140, 0.15)',
+      numColor: 'text-[#6c287a]', 
+      rotate: '-rotate-[2deg]',
+      tapeColor: 'bg-[#61c0af]/90',
+      tapeRotate: 'rotate-[2deg]',
+      tapeClip: 'polygon(3% 0%, 97% 0%, 100% 50%, 97% 100%, 3% 100%, 0% 50%)'
+    },
+    { 
+      label: 'HOURS', 
+      valueKey: 'hours', 
+      bg: '#ffe8a3', 
+      gridColor: 'rgba(255, 154, 0, 0.2)',
+      numColor: 'text-[#7c531d]', 
+      rotate: 'rotate-[1deg]',
+      tapeColor: 'bg-[#eb99a9]/90',
+      tapeRotate: '-rotate-[3deg]',
+      tapeClip: 'polygon(0% 20%, 5% 0%, 95% 0%, 100% 20%, 98% 80%, 95% 100%, 5% 100%, 2% 80%)'
+    },
+    { 
+      label: 'MINUTES', 
+      valueKey: 'mins', 
+      bg: '#d2d6ff', 
+      gridColor: 'rgba(13, 33, 221, 0.15)',
+      numColor: 'text-[#1846b0]', 
+      rotate: '-rotate-[1deg]',
+      tapeColor: 'bg-[#fad02c]/95',
+      tapeRotate: 'rotate-[1deg]',
+      tapeClip: 'polygon(2% 0%, 98% 0%, 100% 60%, 98% 100%, 2% 100%, 0% 40%)'
+    },
+    { 
+      label: 'SECONDS', 
+      valueKey: 'secs', 
+      bg: '#ffffff', 
+      gridColor: 'rgba(0, 0, 0, 0.08)',
+      numColor: 'text-[#5e6b7d]', 
+      rotate: 'rotate-[2deg]',
+      tapeColor: 'bg-[#b8ada0]/90',
+      tapeRotate: '-rotate-[1deg]',
+      tapeClip: 'polygon(4% 0%, 96% 0%, 100% 40%, 96% 100%, 4% 100%, 0% 60%)'
+    },
   ];
 
 
@@ -671,108 +630,10 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-col items-center overflow-x-hidden relative bg-brand-cloud text-brand-ink font-sans">
+    <main className="flex flex-col items-center overflow-x-hidden relative bg-[#ff9a00] text-brand-ink font-sans">
       {/* Noise/Grain Overlay */}
       <div className="noise-overlay" />
 
-      {/* Full Screen Intro Overlay (Resolves Autoplay Policy) - Removed as per user request */}
-
-      {/* Mario Loading Screen Overlay */}
-      <AnimatePresence>
-        {introStarted && !loadingComplete && (
-          <motion.div 
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-[90] bg-brand-ink flex flex-col items-center justify-center overflow-hidden"
-          >
-            <button 
-              onClick={() => setLoadingComplete(true)}
-              className="absolute top-6 right-6 text-xs font-mono font-bold tracking-widest uppercase bg-brand-ink text-brand-cloud/60 border border-brand-cloud/20 px-4 py-2 rounded hover:text-brand-cloud hover:border-brand-cloud/50 transition-colors z-[100]"
-            >
-              SKIP
-            </button>
-
-            <div className="relative w-full max-w-xl h-56 mt-20 border-b-4 border-brand-orange">
-              {/* The Logo SVG Slices (Invisible to Color) */}
-              <div className="absolute top-0 w-full flex items-center justify-center pointer-events-none mt-2">
-                <div className="relative w-full aspect-[550/120] z-20">
-                  {Array.from({ length: 5 }).map((_, sliceIndex) => {
-                    const leftPercent = sliceIndex * 20;
-                    const rightPercent = 100 - ((sliceIndex + 1) * 20);
-                    const hitTime = (sliceIndex + 1) * 1.0;
-                    
-                    return (
-                      <motion.div
-                        key={`mario-slice-${sliceIndex}`}
-                        initial={{ opacity: 0, y: 0 }}
-                        animate={{ 
-                          opacity: [0, 1, 1], // Appear on hit
-                          filter: [
-                            "brightness(1.5) contrast(1.2)", // Flash bright color on impact
-                            "brightness(1) contrast(1)", // Settle to original colors
-                            "brightness(1) contrast(1)"
-                          ],
-                          y: [0, -15, 0] // Bump up slightly when hit
-                        }}
-                        transition={{ 
-                          delay: hitTime, 
-                          duration: 0.4, 
-                          times: [0, 0.3, 1] 
-                        }}
-                        className="absolute inset-0 w-full h-full"
-                        style={{ 
-                          clipPath: `inset(0% ${rightPercent}% 0% ${leftPercent}%)`,
-                          WebkitClipPath: `inset(0% ${rightPercent}% 0% ${leftPercent}%)`
-                        }}
-                      >
-                        <Image
-                          src="/aarambh_logo_extruded.png"
-                          alt="AARAMBH"
-                          fill
-                          className="object-contain"
-                          priority
-                        />
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
-              
-              {/* Mario Sprite */}
-              <motion.div 
-                animate={{ left: marioLeft }}
-                transition={{ left: { duration: TOTAL_DURATION, times: marioLeftTimes, ease: "linear" } }}
-                className="absolute bottom-0 w-8 h-10"
-              >
-                <motion.div
-                   animate={{ y: marioY }}
-                   transition={{ y: { duration: TOTAL_DURATION, times: marioYTimes, ease: "easeOut" } }}
-                   className="relative w-full h-full"
-                >
-                  {/* Hat */}
-                  <div className="absolute top-0 left-[4px] w-[20px] h-[6px] bg-brand-orange" />
-                  {/* Face */}
-                  <div className="absolute top-[6px] left-[8px] w-[16px] h-[10px] bg-[#fcdbb6]" />
-                  {/* Mustache/Eye */}
-                  <div className="absolute top-[8px] left-[18px] w-[8px] h-[4px] bg-brand-ink" />
-                  {/* Body */}
-                  <div className="absolute top-[16px] left-[6px] w-[16px] h-[10px] bg-brand-orange" />
-                  {/* Overalls */}
-                  <div className="absolute top-[20px] left-[8px] w-[12px] h-[8px] bg-brand-blue" />
-                  {/* Legs */}
-                  <div className="absolute top-[28px] left-[8px] w-[6px] h-[8px] bg-brand-blue" />
-                  <div className="absolute top-[28px] left-[14px] w-[6px] h-[8px] bg-brand-blue" />
-                  {/* Shoes */}
-                  <div className="absolute top-[36px] left-[8px] w-[8px] h-[4px] bg-brand-ink" />
-                  <div className="absolute top-[36px] left-[16px] w-[8px] h-[4px] bg-brand-ink" />
-                </motion.div>
-              </motion.div>
-            </div>
-            <h3 className="font-display font-black text-brand-pink text-xl mt-12 animate-pulse uppercase">LOADING...</h3>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Particle Overlay for click explosions */}
       <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -806,151 +667,77 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      {/* Comic Magazine Cover Hero */}
-      <section 
-        className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-brand-cloud text-brand-ink selection:bg-brand-pink selection:text-brand-cloud p-4 md:p-8"
-      >
-        {/* Noise overlay and grid ticks */}
-        <div className="absolute inset-0 bg-halftone-black opacity-[0.03] pointer-events-none z-0" />
+      {/* ═══════════════════════════════════════════════════════════ */}
+      {/* HERO SECTION — Torn Paper PNG + Word Cloud + TV Collage   */}
+      {/* ═══════════════════════════════════════════════════════════ */}
+      <section className="relative w-full h-screen min-h-[650px] md:min-h-[700px] lg:min-h-[800px] flex flex-col justify-between overflow-hidden bg-[#ff9a00]" id="hero">
+        {/* Torn Paper Effect Background PNG */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero/1920x1080.png"
+            alt="Torn paper background frame"
+            className="w-full h-full object-fill"
+            draggable={false}
+          />
+        </div>
 
+        {/* Top Band: Empty Spacer to clear the navbar */}
+        <div className="relative w-full z-10 h-[14vh] min-h-[95px] md:min-h-[115px] pointer-events-none" />
 
-        {/* Full-bleed Translucent Fluid Alcohol Ink Background with mouse warp distortion */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none">
-          <div
-            className="absolute inset-0 w-full h-full"
-          >
+        {/* Middle Section: Word Cloud + TV Collage */}
+        <div className="relative flex-1 w-full flex items-center justify-center z-10 px-4 md:px-8 py-2 md:py-4">
+          <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 lg:gap-12">
+            
+            {/* Left: Word Cloud Typography Art */}
             <motion.div
-              animate={{
-                y: [0, -35, 25, -25, 15, -15, 0],
-                x: [0, 20, -20, 15, -15, 8, 0],
-                skewX: [0, 4, -4, 2.5, -2.5, 1.2, 0],
-                skewY: [0, 2, -2, 1.2, -1.2, 0.6, 0],
-                scale: [1.02, 1.08, 1.01, 1.06, 1.02],
-              }}
-              transition={{
-                duration: 12,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut"
-              }}
-              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full md:w-[54%] flex items-center justify-center"
             >
-              <Image
-                src="/images/translucent_fluid_ink.webp"
-                alt="Translucent Fluid Alcohol Ink background"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover opacity-100 sm:opacity-65 scale-[1.08] filter saturate-[1.8] brightness-[0.97] contrast-[1.05] sm:saturate-100 sm:brightness-[1.01] sm:contrast-[0.99]"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/hero/aarambh.png"
+                alt="AARAMBH word cloud typography art"
+                className="w-full max-h-[35vh] md:max-h-[50vh] object-contain select-none mix-blend-multiply"
+                draggable={false}
               />
             </motion.div>
-          </div>
-          {/* Subtle radial gradient overlay to ensure central text readability & keep margins textured */}
-          <div className="absolute inset-0 hidden sm:block bg-[radial-gradient(circle_at_center,rgba(245,241,229,0.75)_0%,rgba(245,241,229,0.1)_100%)] pointer-events-none" />
-        </div>
 
-        {/* Floating abstract Y2K Sparkle Stars (Drifts dynamically with cursor) */}
-        <div className="absolute inset-0 pointer-events-none z-20 hidden md:block select-none">
-          {/* Star 1: Bold Pink */}
-          <motion.div
-            animate={{ rotate: [0, 360], scale: [1, 1.12, 1] }}
-            transition={{ rotate: { repeat: Infinity, duration: 25, ease: "linear" }, scale: { repeat: Infinity, duration: 6, ease: "easeInOut" } }}
-            className="absolute top-[20%] left-[28%] text-brand-pink/70"
-          >
-            <SparkleStar size={36} />
-          </motion.div>
-
-          {/* Star 2: Electric Blue */}
-          <motion.div
-            animate={{ rotate: [360, 0], scale: [1, 1.15, 1] }}
-            transition={{ rotate: { repeat: Infinity, duration: 20, ease: "linear" }, scale: { repeat: Infinity, duration: 5, ease: "easeInOut" } }}
-            className="absolute bottom-[28%] right-[32%] text-brand-blue"
-          >
-            <SparkleStar size={48} />
-          </motion.div>
-        </div>
-
-        {/* Draggable Pop-Art Stickers with synthesized audio triggers */}
-        <div className="hidden lg:block absolute inset-0 z-10 pointer-events-none">
-          {stickers.map((sticker, idx) => (
+            {/* Right: Retro TV Collage with Video */}
             <motion.div
-              key={idx}
-              drag
-              dragConstraints={{ left: -300, right: 300, top: -150, bottom: 150 }}
-              dragTransition={{ bounceStiffness: 600, bounceDamping: 25 }}
-              initial={{
-                filter: "drop-shadow(3px 12px 18px rgba(3, 4, 4, 0.15)) drop-shadow(1px 4px 6px rgba(3, 4, 4, 0.08))"
-              }}
-              animate={{
-                y: [0, -6, 0],
-                rotate: [sticker.rotate, (parseFloat(sticker.rotate) + 1.5) + "deg", sticker.rotate],
-              }}
-              transition={{
-                y: {
-                  duration: 4.5 + idx * 0.8,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                  delay: sticker.floatDelay,
-                },
-                rotate: {
-                  duration: 5.5 + idx * 0.6,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                  delay: sticker.floatDelay,
-                }
-              }}
-              whileHover={{
-                scale: 1.05,
-                y: -12,
-                zIndex: 50,
-                filter: "drop-shadow(8px 24px 32px rgba(3, 4, 4, 0.22)) drop-shadow(2px 8px 12px rgba(3, 4, 4, 0.12))",
-                transition: { type: "spring", stiffness: 300, damping: 15 }
-              }}
-              whileDrag={{
-                scale: 1.1,
-                zIndex: 100,
-                filter: "drop-shadow(12px 36px 48px rgba(3, 4, 4, 0.26)) drop-shadow(4px 12px 18px rgba(3, 4, 4, 0.15))"
-              }}
-              onDragStart={(e) => {
-                // Synthesizes retro sounds when dragging begins
-                playSynthSound(sticker.type as any);
-              }}
-              onClick={(e) => {
-                // Spawn click explosion right at stamp/sticker location
-                spawnParticles(e.clientX, e.clientY);
-                playSynthSound(sticker.type as any);
-              }}
-              style={{
-                top: sticker.top,
-                left: sticker.left,
-                right: sticker.right,
-                bottom: sticker.bottom,
-              }}
-              className="absolute pointer-events-auto cursor-grab select-none"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full md:w-[42%] flex items-center justify-center"
             >
-              <div 
-                className="relative overflow-hidden rounded-xl" 
-                style={{ width: sticker.width, height: sticker.height }}
-              >
-                <Image
-                  src={sticker.src}
-                  alt={sticker.alt}
-                  fill
-                  className="object-contain"
-                  priority
+              <div className="hero-tv-container w-full max-w-[280px] sm:max-w-[320px] md:max-w-full">
+                {/* TV Collage Image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/hero/tv-collage.png"
+                  alt="Retro TV Collage with stickers"
+                  className="hero-tv-image"
+                  draggable={false}
                 />
-                {/* Premium Paper Grain overlay */}
-                <div 
-                  className="absolute inset-0 pointer-events-none opacity-[0.08] mix-blend-overlay"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
-                  }}
-                />
+                {/* Video playing inside the TV screen */}
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="hero-tv-video"
+                >
+                  <source src="/hero/video.mp4" type="video/mp4" />
+                  <source src="/hero/video.webm" type="video/webm" />
+                </video>
+                {/* CRT Scanline effect overlay */}
+                <div className="hero-tv-scanlines" />
               </div>
             </motion.div>
-          ))}
+
+          </div>
         </div>
 
         {/* Main Content Container */}
@@ -1062,9 +849,56 @@ export default function Home() {
 
 
     </section>
+        {/* Bottom Spacer/Band to align with the torn edge */}
+        <div className="w-full h-[14vh] min-h-[60px] z-10 pointer-events-none" />
+      </section>
+>>>>>>> 73c5cb2 (hero section)
 
-      {/* Torn paper visual separation */}
-      <TornPaperDivider color="fill-brand-ink" />
+      {/* ── Countdown Timer Strip ── */}
+      <section className="w-full py-8 z-10 flex justify-center items-center overflow-hidden bg-[#ff9a00]">
+        <div className="flex items-center justify-center gap-3 sm:gap-6 px-4 py-2">
+          {countdownBlocks.map((block) => (
+            <div
+              key={block.label}
+              className={`relative flex flex-col justify-between items-center p-3 sm:p-5 border border-brand-ink/10 shadow-[4px_4px_10px_rgba(3,4,4,0.12)] rounded-sm ${block.rotate} transition-transform hover:scale-105 duration-300 w-[75px] sm:w-[110px] md:w-[130px] h-[105px] sm:h-[150px] md:h-[180px]`}
+              style={{
+                backgroundColor: block.bg,
+                backgroundImage: `linear-gradient(${block.gridColor} 1px, transparent 1px), linear-gradient(90deg, ${block.gridColor} 1px, transparent 1px)`,
+                backgroundSize: '12px 12px',
+              }}
+            >
+              {/* Tape decoration at the top */}
+              <div 
+                className={`absolute -top-2.5 left-1/2 -translate-x-1/2 w-10 sm:w-16 h-3 sm:h-4 ${block.tapeColor} shadow-sm ${block.tapeRotate} z-20`}
+                style={{
+                  clipPath: block.tapeClip
+                }}
+              />
+
+              {/* Label: Days, Hours, etc. */}
+              <span className="text-[9px] sm:text-xs font-serif font-black tracking-widest text-[#030404]/75 mt-2 select-none">
+                {block.label}
+              </span>
+
+              {/* Number with sketched hand-drawn font */}
+              <div className="flex-1 flex items-center justify-center w-full mb-1 sm:mb-2">
+                <AnimatePresence mode="popLayout">
+                  <motion.span
+                    key={timeLeft[block.valueKey as keyof TimeLeft]}
+                    initial={{ y: 15, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -15, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className={`${cabinSketch.className} ${block.numColor} text-3xl sm:text-5xl md:text-6xl font-bold tabular-nums`}
+                  >
+                    {String(timeLeft[block.valueKey as keyof TimeLeft]).padStart(2, '0')}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
 
 
