@@ -65,17 +65,25 @@ export default function Navbar() {
     { name: 'Contact', href: '/contact' },
   ];
 
+  const isDarkHero = pathname === '/' && !isScrolled;
+  const navTextColor = isDarkHero ? 'text-brand-cloud hover:text-brand-orange' : 'text-brand-ink hover:text-brand-pink';
+  const navActiveColor = isDarkHero ? 'text-brand-orange' : 'text-brand-pink';
+  const navIndicatorBg = isDarkHero ? 'bg-brand-orange' : 'bg-brand-pink';
+  const navIndicatorShadow = isDarkHero ? 'shadow-[0_0_8px_var(--color-brand-orange)]' : 'shadow-[0_0_8px_var(--color-brand-pink)]';
+  const logoSrc = isDarkHero ? '/logo-variations/png/Cloud_White.png' : '/logo-variations/png/Ink_Black.png';
+  const navbarBg = isScrolled ? 'bg-[#fff5e6]/90 backdrop-blur-md shadow-md border border-[#030404]/10' : 'bg-transparent';
+
   return (
     <>
       <nav
-        className="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-6xl z-50 transition-all duration-300 rounded-full border border-transparent bg-transparent py-3.5 px-6"
+        className={`fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-6xl z-50 transition-all duration-300 rounded-full ${navbarBg} py-3.5 px-6`}
       >
         <div className="flex justify-between items-center w-full">
           {/* Mobile View Toggle & Logo */}
           <div className="flex md:hidden justify-between items-center w-full">
             <Link href="/" className="flex items-center shrink-0">
               <Image
-                src="/logo-variations/png/Ink_Black.png"
+                src={logoSrc}
                 alt="AARAMBH'26"
                 width={150}
                 height={47}
@@ -107,14 +115,14 @@ export default function Navbar() {
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`relative py-1 px-3 text-xs font-bold tracking-widest uppercase transition-colors duration-200 ${
-                    pathname === link.href ? 'text-brand-pink' : 'text-brand-ink hover:text-brand-pink'
+                    pathname === link.href ? navActiveColor : `${navTextColor}`
                   }`}
                 >
                   {link.name}
                   {pathname === link.href && (
                     <motion.div
                       layoutId="activeNav"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-pink rounded-full shadow-[0_0_8px_var(--color-brand-pink)]"
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 ${navIndicatorBg} rounded-full ${navIndicatorShadow}`}
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -126,7 +134,7 @@ export default function Navbar() {
             <div className="flex-shrink-0 mx-10">
               <Link href="/" className="flex items-center" onClick={(e) => handleNavClick(e, '/')}>
                 <Image
-                  src="/logo-variations/png/Ink_Black.png"
+                  src={logoSrc}
                   alt="AARAMBH'26"
                   width={200}
                   height={63}
@@ -144,14 +152,14 @@ export default function Navbar() {
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`relative py-1 px-3 text-xs font-bold tracking-widest uppercase transition-colors duration-200 ${
-                    pathname === link.href ? 'text-brand-pink' : 'text-brand-ink hover:text-brand-pink'
+                    pathname === link.href ? navActiveColor : `${navTextColor}`
                   }`}
                 >
                   {link.name}
                   {pathname === link.href && (
                     <motion.div
                       layoutId="activeNav"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-pink rounded-full shadow-[0_0_8px_var(--color-brand-pink)]"
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 ${navIndicatorBg} rounded-full ${navIndicatorShadow}`}
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}

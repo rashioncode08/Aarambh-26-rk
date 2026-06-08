@@ -49,6 +49,20 @@ const SparkleStar = ({ className, size = 32 }: { className?: string; size?: numb
   </svg>
 );
 
+const RocketSVG = () => (
+  <svg viewBox="0 0 64 64" className="w-12 h-12 drop-shadow-[0_0_12px_rgba(245,130,30,0.65)]" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Fins */}
+    <path d="M12 48C12 36 20 32 24 30L20 48H12Z" fill="#215798" stroke="#184176" strokeWidth="2.5" />
+    <path d="M52 48C52 36 44 32 40 30L44 48H52Z" fill="#215798" stroke="#184176" strokeWidth="2.5" />
+    {/* Body */}
+    <path d="M32 6C38 16 42 26 42 38C42 46 38 52 32 54C26 54 22 46 22 38C22 26 26 16 32 6Z" fill="#F5F1E5" stroke="#184176" strokeWidth="3" />
+    {/* Window */}
+    <circle cx="32" cy="26" r="5" fill="#f5821e" stroke="#184176" strokeWidth="2.5" />
+    {/* Fire / Boost */}
+    <path d="M26 54L32 64L38 54H26Z" fill="#f5821e" />
+  </svg>
+);
+
 const marqueeVariants: Variants = {
   animate: {
     x: [0, -1035],
@@ -515,9 +529,120 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, mins: 0, secs: 0 });
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isMounted, setIsMounted] = useState(false);
+  const [rocketState, setRocketState] = useState<{
+    rocket: { x: number; y: number; rotation: number; scale: number; zIndex: number; opacity: number };
+    smoke: { id: number; x: number; y: number; size: number; opacity: number }[];
+  }>({
+    rocket: { x: 0, y: 0, rotation: 0, scale: 1, zIndex: 25, opacity: 1 },
+    smoke: []
+  });
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    let animationId: number;
+    let angle = 0;
+    const speed = 0.012; // speed of orbit (radians per frame)
+    
+    // Radii of ellipse (responsive)
+    let rx = 360; 
+    let ry = 95;
+    const tilt = -15 * (Math.PI / 180); // tilt orbit by -15 degrees
+    
+    const updateDimensions = () => {
+      if (window.innerWidth < 640) {
+        rx = 130;
+        ry = 35;
+      } else if (window.innerWidth < 1024) {
+        rx = 240;
+        ry = 65;
+      } else {
+        rx = 360;
+        ry = 95;
+      }
+    };
+    
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    
+    let particleCounter = 0;
+    
+    const tick = () => {
+      angle = (angle + speed) % (2 * Math.PI);
+      
+      // Ellipse position
+      const ex = Math.cos(angle) * rx;
+      const ey = Math.sin(angle) * ry;
+      
+      // Apply 3D tilt rotation
+      const x = ex * Math.cos(tilt) - ey * Math.sin(tilt);
+      const y = ex * Math.sin(tilt) + ey * Math.cos(tilt);
+      
+      // Velocity vector for tangent rotation
+      const vx = -rx * Math.sin(angle) * Math.cos(tilt) - ry * Math.cos(angle) * Math.sin(tilt);
+      const vy = -rx * Math.sin(angle) * Math.sin(tilt) + ry * Math.cos(angle) * Math.cos(tilt);
+      
+      let rotation = Math.atan2(vy, vx) * (180 / Math.PI) + 90; // +90 because rocket points up
+      
+      const isBehind = Math.sin(angle) < 0;
+      
+      // Smoothly interpolate scale between 0.65 (furthest) and 1.3 (closest)
+      const depthFactor = (Math.sin(angle) + 1) / 2; // 0 to 1
+      const scale = 0.65 + depthFactor * 0.65; 
+      const opacity = 0.65 + depthFactor * 0.35; 
+      const zIndex = isBehind ? 5 : 25; // Logo will have zIndex 10
+      
+      const newRocket = { x, y, rotation, scale, zIndex, opacity };
+      
+      // Emit smoke particle from the tail of the rocket
+      let newParticles: { id: number; x: number; y: number; size: number; opacity: number }[] = [];
+      particleCounter++;
+      if (particleCounter >= 3) { // Emit every 3 frames (~50ms)
+        particleCounter = 0;
+        
+        // Calculate rocket tail position (approx 25px behind rocket nose)
+        const radRot = (rotation - 90) * (Math.PI / 180);
+        const tailX = x - Math.cos(radRot) * 25;
+        const tailY = y - Math.sin(radRot) * 25;
+        
+        newParticles.push({
+          id: Math.random() + Date.now(),
+          x: tailX,
+          y: tailY,
+          size: Math.random() * 8 + 6,
+          opacity: 0.8
+        });
+      }
+      
+      setRocketState((prev) => {
+        const updatedSmoke = [
+          ...prev.smoke.map((p) => ({
+            ...p,
+            size: p.size + 0.15, // smoke expands
+            opacity: p.opacity - 0.015, // smoke fades
+            x: p.x + (Math.random() - 0.5) * 0.6,
+            y: p.y - 0.2 // rise slightly
+          })).filter((p) => p.opacity > 0),
+          ...newParticles
+        ];
+        
+        return {
+          rocket: newRocket,
+          smoke: updatedSmoke
+        };
+      });
+      
+      animationId = requestAnimationFrame(tick);
+    };
+    
+    animationId = requestAnimationFrame(tick);
+    
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', updateDimensions);
+    };
   }, []);
 
 
@@ -668,26 +793,83 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════ */}
-      {/* HERO SECTION — Torn Paper PNG + Word Cloud + TV Collage   */}
+      {/* HERO SECTION — Space Orbit, Centered Logo & 3D Rocket      */}
       {/* ═══════════════════════════════════════════════════════════ */}
-      <section className="relative w-full h-screen min-h-[650px] md:min-h-[700px] lg:min-h-[800px] flex flex-col justify-between overflow-hidden bg-[#ff9a00]" id="hero">
-        {/* Torn Paper Effect Background PNG */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero/1920x1080.png"
-            alt="Torn paper background frame"
-            className="w-full h-full object-fill"
-            draggable={false}
-          />
+      <section className="relative w-full h-screen min-h-[600px] md:min-h-[700px] lg:min-h-[800px] flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#184176] to-[#215798]" id="hero">
+        {/* Concentric Orbit Rings Background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
+          <div className="absolute w-[180px] h-[180px] border border-[#f5821e]/15 rounded-full" />
+          <div className="absolute w-[360px] h-[360px] border border-[#f5821e]/12 rounded-full" />
+          <div className="absolute w-[580px] h-[580px] border border-[#f5821e]/8 rounded-full" />
+          <div className="absolute w-[800px] h-[800px] border border-[#f5821e]/5 rounded-full" />
+          <div className="absolute w-[1050px] h-[1050px] border border-[#f5821e]/3 rounded-full" />
         </div>
 
-        {/* Top Band: Empty Spacer to clear the navbar */}
-        <div className="relative w-full z-10 h-[14vh] min-h-[95px] md:min-h-[115px] pointer-events-none" />
+        {/* Top Spacer to clear floating split navbar */}
+        <div className="relative w-full z-10 h-[14vh] min-h-[90px] md:min-h-[110px] pointer-events-none" />
 
+        {/* Center Canvas Area with Logo + Orbiting Rocket */}
+        <div className="relative flex-1 w-full flex items-center justify-center z-10 px-4 md:px-8">
+          <div className="relative w-full max-w-4xl mx-auto flex items-center justify-center min-h-[300px] sm:min-h-[450px]">
+            
+            {/* Centered Brand Logo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-[260px] sm:w-[400px] md:w-[500px] lg:w-[580px] aspect-[1200/630] select-none"
+              style={{ zIndex: 10 }}
+            >
+              <Image
+                src="/hero/new_logo.png"
+                alt="AARAMBH 2026"
+                fill
+                className="object-contain"
+                priority
+              />
+            </motion.div>
 
-        {/* Bottom Spacer/Band to align with the torn edge */}
-        <div className="w-full h-[14vh] min-h-[60px] z-10 pointer-events-none" />
+            {/* Orbiting Rocket smoke particles */}
+            {rocketState.smoke.map((p) => (
+              <div
+                key={p.id}
+                className="absolute bg-[#f5821e]/40 rounded-full pointer-events-none blur-[2.5px]"
+                style={{
+                  left: `calc(50% + ${p.x}px)`,
+                  top: `calc(50% + ${p.y}px)`,
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  opacity: p.opacity,
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 8,
+                }}
+              />
+            ))}
+
+            {/* 3D Orbiting Rocket */}
+            <motion.div
+              className="absolute pointer-events-none"
+              style={{
+                left: `calc(50% + ${rocketState.rocket.x}px)`,
+                top: `calc(50% + ${rocketState.rocket.y}px)`,
+                x: '-50%',
+                y: '-50%',
+                rotate: rocketState.rocket.rotation,
+                scale: rocketState.rocket.scale,
+                opacity: rocketState.rocket.opacity,
+                zIndex: rocketState.rocket.zIndex,
+              }}
+            >
+              <RocketSVG />
+            </motion.div>
+
+          </div>
+        </div>
+
+        {/* Bottom Spacer & Torn Paper Divider to transition to orange countdown */}
+        <div className="w-full relative z-20">
+          <TornPaperDivider color="fill-brand-orange" />
+        </div>
       </section>
 
       {/* ── Countdown Timer Strip ── */}
