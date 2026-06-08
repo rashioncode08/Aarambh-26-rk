@@ -695,7 +695,7 @@ export default function Home() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/hero section/new_logo.png"
+              src="/hero section/new_logo2.png"
               alt="Aarambh New Logo"
               className="w-full h-auto max-h-[45vh] md:max-h-[55vh] object-contain select-none"
               draggable={false}
