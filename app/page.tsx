@@ -685,60 +685,6 @@ export default function Home() {
         {/* Top Band: Empty Spacer to clear the navbar */}
         <div className="relative w-full z-10 h-[14vh] min-h-[95px] md:min-h-[115px] pointer-events-none" />
 
-        {/* Middle Section: Word Cloud + TV Collage */}
-        <div className="relative flex-1 w-full flex items-center justify-center z-10 px-4 md:px-8 py-2 md:py-4">
-          <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 lg:gap-12">
-            
-            {/* Left: Word Cloud Typography Art */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full md:w-[54%] flex items-center justify-center"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/hero/aarambh.png"
-                alt="AARAMBH word cloud typography art"
-                className="w-full max-h-[35vh] md:max-h-[50vh] object-contain select-none mix-blend-multiply"
-                draggable={false}
-              />
-            </motion.div>
-
-            {/* Right: Retro TV Collage with Video */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full md:w-[42%] flex items-center justify-center"
-            >
-              <div className="hero-tv-container w-full max-w-[280px] sm:max-w-[320px] md:max-w-full">
-                {/* TV Collage Image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/hero/tv-collage.png"
-                  alt="Retro TV Collage with stickers"
-                  className="hero-tv-image"
-                  draggable={false}
-                />
-                {/* Video playing inside the TV screen */}
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="hero-tv-video"
-                >
-                  <source src="/hero/video.mp4" type="video/mp4" />
-                  <source src="/hero/video.webm" type="video/webm" />
-                </video>
-                {/* CRT Scanline effect overlay */}
-                <div className="hero-tv-scanlines" />
-              </div>
-            </motion.div>
-
-          </div>
-        </div>
 
         {/* Bottom Spacer/Band to align with the torn edge */}
         <div className="w-full h-[14vh] min-h-[60px] z-10 pointer-events-none" />
