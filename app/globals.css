@@ -18,9 +18,7 @@
 }
 
 @theme {
-  --color-brand-orange: #f5821e;
-  --color-brand-dark-blue: #184176;
-  --color-brand-med-blue: #215798;
+  --color-brand-orange: #FF9A00;
   --color-brand-pink: #FF188C;
   --color-brand-blue: #0D21DD;
   --color-brand-ink: #030404;
@@ -28,7 +26,7 @@
 
   --color-admin-bg: #F5F1E5;
   --color-admin-surface: #ffffff;
-  --color-admin-accent: #f5821e;
+  --color-admin-accent: #FF9A00;
   --color-admin-text: #030404;
   --color-admin-muted: #64748b;
   --color-admin-border: #e2e8f0;
