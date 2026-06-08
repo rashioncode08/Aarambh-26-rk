@@ -469,18 +469,23 @@ interface SmokeParticle {
   y: number;
   size: number;
   alpha: number;
-  color: string;
   vx: number;
   vy: number;
+  rotation: number;
+  scaleY: number;
+  color: string;
 }
 
 function RocketOrbit() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [angle, setAngle] = useState(0);
+  const [rocket, setRocket] = useState({ x: 0, y: 0, scale: 1, zIndex: 30, heading: 0, opacity: 1 });
   const [smoke, setSmoke] = useState<SmokeParticle[]>([]);
+  
+  const timeRef = useRef<number>(0);
   const requestRef = useRef<number | null>(null);
   const prevTimeRef = useRef<number | null>(null);
+  const lastSpawnRef = useRef<number>(0);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -496,8 +501,6 @@ function RocketOrbit() {
 
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
-
-    // Initial delay to let the layout settle
     const timer = setTimeout(updateDimensions, 200);
 
     return () => {
@@ -506,13 +509,123 @@ function RocketOrbit() {
     };
   }, []);
 
-  const animate = (time: number) => {
-    if (prevTimeRef.current !== null) {
-      const delta = (time - prevTimeRef.current) * 0.001; // seconds
+  const getPathPosition = (t: number) => {
+    const rx = dimensions.width / 2;
+    const ry = dimensions.height / 2;
 
-      // Revolve speed: 1 full rotation every 5.5 seconds
-      const speed = 1.14; // rad per second
-      setAngle((prev) => (prev + speed * delta) % (2 * Math.PI));
+    const normalRadiusX = dimensions.width * 0.52;
+    const normalRadiusY = dimensions.height * 0.8;
+
+    const entryDuration = 5.0; // 5 seconds of entry spiral
+    let radX = normalRadiusX;
+    let radY = normalRadiusY;
+    let angle = 0;
+    let offsetY = 0;
+    let noiseX = 0;
+    let noiseY = 0;
+
+    if (t < entryDuration) {
+      const progress = t / entryDuration; // 0 to 1
+      const spiralFactor = 1.0 - progress; // 1 to 0
+
+      // Start at 135deg (top-left) with a massive radius and spiral inwards
+      angle = t * 2.8 + Math.PI * 0.75;
+      radX = normalRadiusX * (1.0 + spiralFactor * 2.8);
+      radY = normalRadiusY * (1.0 + spiralFactor * 2.8);
+      
+      // Start high up and drop down
+      offsetY = -spiralFactor * 180;
+
+      // Add wavy noise
+      noiseX = Math.sin(t * 8) * 35 * spiralFactor;
+      noiseY = Math.cos(t * 8) * 30 * spiralFactor;
+    } else {
+      // Stable orbit
+      angle = (t - entryDuration) * 1.5 + (entryDuration * 2.8 + Math.PI * 0.75);
+    }
+
+    // Un-tilted orbit
+    const dx = radX * Math.cos(angle) + noiseX;
+    const dy = radY * Math.sin(angle) + noiseY;
+
+    // 3D Tilt rotation (approx -18 degrees)
+    const tiltRad = -18 * Math.PI / 180;
+    const cosTilt = Math.cos(tiltRad);
+    const sinTilt = Math.sin(tiltRad);
+
+    const tiltedX = dx * cosTilt - dy * sinTilt;
+    const tiltedY = dx * sinTilt + dy * cosTilt + offsetY;
+
+    return {
+      x: rx + tiltedX,
+      y: ry + tiltedY,
+      angle: angle,
+    };
+  };
+
+  const animate = (timestamp: number) => {
+    if (prevTimeRef.current !== null) {
+      const delta = (timestamp - prevTimeRef.current) * 0.001; // seconds
+      timeRef.current += delta;
+      const t = timeRef.current;
+
+      if (dimensions.width > 0) {
+        // Calculate current and next positions for heading tangent
+        const pos = getPathPosition(t);
+        const nextPos = getPathPosition(t + 0.01);
+        const heading = Math.atan2(nextPos.y - pos.y, nextPos.x - pos.x);
+
+        // 3D Depth layering (Behind vs. In-front)
+        // In our un-tilted angle, y goes up (behind) when sin(angle) < 0
+        const isBehind = Math.sin(pos.angle) < 0;
+        const scale = isBehind
+          ? 0.6 + 0.15 * Math.sin(pos.angle) // 0.45 to 0.6
+          : 0.95 + 0.3 * Math.sin(pos.angle); // 0.95 to 1.25
+        const zIndex = isBehind ? 5 : 30;
+        const opacity = isBehind ? 0.75 : 1.0;
+
+        setRocket({
+          x: pos.x,
+          y: pos.y,
+          scale,
+          zIndex,
+          heading,
+          opacity,
+        });
+
+        // Spawn smoke at tail
+        const now = Date.now();
+        if (now - lastSpawnRef.current > 40) {
+          lastSpawnRef.current = now;
+
+          const rocketSize = Math.max(50, dimensions.height * 0.35);
+          const offset = (rocketSize / 2) * scale;
+          const tailX = pos.x - Math.cos(heading) * offset;
+          const tailY = pos.y - Math.sin(heading) * offset;
+
+          const smokeColors = [
+            'rgba(240, 240, 240, 0.85)', // Light gray
+            'rgba(215, 215, 215, 0.75)', // Medium gray
+            'rgba(255, 154, 0, 0.7)',   // Accent orange fire smoke
+            'rgba(255, 24, 140, 0.55)',   // Pink trail spark
+          ];
+
+          const newParticle: SmokeParticle = {
+            id: Math.random() + now,
+            x: tailX,
+            y: tailY,
+            size: (Math.random() * 18 + 14) * scale, // scale smoke size with rocket depth
+            alpha: 0.9,
+            vx: -Math.cos(heading) * 55 + (Math.random() - 0.5) * 25,
+            vy: -Math.sin(heading) * 55 + (Math.random() - 0.5) * 25,
+            rotation: Math.random() * 360,
+            scaleY: 0.75 + Math.random() * 0.4,
+            color: smokeColors[Math.floor(Math.random() * smokeColors.length)],
+          };
+
+          setSmoke((prev) => [...prev, newParticle]);
+        }
+      }
 
       // Update smoke particles
       setSmoke((prev) =>
@@ -521,13 +634,14 @@ function RocketOrbit() {
             ...p,
             x: p.x + p.vx * delta,
             y: p.y + p.vy * delta,
-            size: p.size + 15 * delta, // smoke expands
-            alpha: p.alpha - 0.7 * delta, // smoke fades
+            size: p.size + 22 * delta, // smoke expands
+            alpha: p.alpha - 0.9 * delta, // smoke fades
           }))
           .filter((p) => p.alpha > 0)
       );
     }
-    prevTimeRef.current = time;
+
+    prevTimeRef.current = timestamp;
     requestRef.current = requestAnimationFrame(animate);
   };
 
@@ -536,86 +650,34 @@ function RocketOrbit() {
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, []);
-
-  // Compute rocket position and heading
-  const rx = dimensions.width / 2;
-  const ry = dimensions.height / 2;
-  
-  // Orbit radius is slightly larger than the logo
-  const radiusX = dimensions.width * 0.58;
-  const radiusY = dimensions.height * 0.85;
-
-  const rocketX = rx + radiusX * Math.cos(angle);
-  const rocketY = ry + radiusY * Math.sin(angle);
-
-  // Tangent for heading angle
-  const tangentX = -radiusX * Math.sin(angle);
-  const tangentY = radiusY * Math.cos(angle);
-  const heading = Math.atan2(tangentY, tangentX);
-  const headingDegrees = (heading * 180) / Math.PI;
-
-  // Size of rocket (1/3 of logo height)
-  const rocketSize = Math.max(50, dimensions.height * 0.35);
-
-  // Spawn smoke particles at the rocket's tail
-  const lastSpawnRef = useRef<number>(0);
-  useEffect(() => {
-    const now = Date.now();
-    // Spawn particle every 45ms
-    if (now - lastSpawnRef.current > 45 && dimensions.width > 0) {
-      lastSpawnRef.current = now;
-
-      const offset = rocketSize / 2;
-      const tailX = rocketX - Math.cos(heading) * offset;
-      const tailY = rocketY - Math.sin(heading) * offset;
-
-      // Multiple shades of gray/orange/pink for smoke
-      const smokeColors = [
-        'rgba(240, 240, 240, 0.75)', // Light gray
-        'rgba(200, 200, 200, 0.65)', // Medium gray
-        'rgba(255, 154, 0, 0.6)',   // Accent orange fire
-        'rgba(255, 24, 140, 0.5)',   // Pink spark
-      ];
-      
-      const newParticle: SmokeParticle = {
-        id: Math.random() + now,
-        x: tailX,
-        y: tailY,
-        size: Math.random() * 8 + 6,
-        alpha: 0.8,
-        color: smokeColors[Math.floor(Math.random() * smokeColors.length)],
-        vx: -tangentX * 0.15 + (Math.random() - 0.5) * 15,
-        vy: -tangentY * 0.15 + (Math.random() - 0.5) * 15,
-      };
-
-      setSmoke((prev) => [...prev, newParticle]);
-    }
-  }, [angle, dimensions, rocketX, rocketY, heading, rocketSize]);
+  }, [dimensions]);
 
   if (dimensions.width === 0) {
     return <div ref={containerRef} className="absolute inset-0 pointer-events-none" />;
   }
+
+  const rocketSize = Math.max(50, dimensions.height * 0.35) * rocket.scale;
+  const headingDegrees = (rocket.heading * 180) / Math.PI;
 
   return (
     <div
       ref={containerRef}
       className="absolute inset-0 pointer-events-none z-30 overflow-visible"
     >
-      {/* Smoke particles */}
+      {/* Smoke trail */}
       {smoke.map((p) => (
         <div
           key={p.id}
-          className="absolute rounded-full filter blur-[1px]"
+          className="absolute rounded-full pointer-events-none"
           style={{
             left: p.x,
             top: p.y,
             width: p.size,
             height: p.size,
-            backgroundColor: p.color,
+            background: `radial-gradient(circle, ${p.color} 0%, rgba(200, 200, 200, 0.4) 40%, rgba(150, 150, 150, 0) 70%)`,
             opacity: p.alpha,
-            transform: 'translate(-50%, -50%)',
-            transition: 'opacity 0.1s ease',
+            filter: 'blur(3px)',
+            transform: `translate(-50%, -50%) rotate(${p.rotation}deg) scaleY(${p.scaleY})`,
           }}
         />
       ))}
@@ -624,21 +686,42 @@ function RocketOrbit() {
       <div
         className="absolute transition-transform duration-75 ease-out"
         style={{
-          left: rocketX,
-          top: rocketY,
+          left: rocket.x,
+          top: rocket.y,
           width: rocketSize,
           height: rocketSize,
+          zIndex: rocket.zIndex,
+          opacity: rocket.opacity,
           transform: `translate(-50%, -50%) rotate(${headingDegrees + 90}deg)`,
         }}
       >
-        <div className="w-full h-full relative overflow-hidden rounded-full border border-brand-ink/15 shadow-md bg-brand-cloud">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero section/rocket.jfif"
-            alt="Rocket"
-            className="w-full h-full object-cover select-none mix-blend-multiply"
-            draggable={false}
-          />
+        <div className="w-full h-full relative overflow-visible">
+          {/* Custom vector SVG Rocket (Sharp, modern, matches site branding) */}
+          <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[2px_4px_6px_rgba(3,4,4,0.15)]" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Thrust Flame */}
+            <path d="M44,76 L50,96 L56,76 Z" fill="#FF9A00" stroke="#030404" strokeWidth="2.5" strokeLinejoin="round" />
+            <path d="M47,76 L50,88 L53,76 Z" fill="#FF188C" />
+            
+            {/* Left Fin */}
+            <path d="M37,60 L22,78 C21,80 25,82 32,80 L39,72 Z" fill="#0D21DD" stroke="#030404" strokeWidth="3" strokeLinejoin="round" />
+            
+            {/* Right Fin */}
+            <path d="M63,60 L78,78 C79,80 75,82 68,80 L61,72 Z" fill="#0D21DD" stroke="#030404" strokeWidth="3" strokeLinejoin="round" />
+            
+            {/* Rocket Main Body */}
+            <path d="M50,12 C62,28 66,48 61,74 L39,74 C34,48 38,28 50,12 Z" fill="#F5F1E5" stroke="#030404" strokeWidth="3" strokeLinejoin="round" />
+            
+            {/* Nose Cone */}
+            <path d="M50,12 C55,20 58,28 57,35 L43,35 C42,28 45,20 50,12 Z" fill="#FF188C" stroke="#030404" strokeWidth="3" strokeLinejoin="round" />
+            
+            {/* Porthole Window */}
+            <circle cx="50" cy="48" r="8.5" fill="#0D21DD" stroke="#030404" strokeWidth="3" />
+            <circle cx="50" cy="48" r="5" fill="#ffffff" opacity="0.3" />
+            <circle cx="47" cy="45" r="2.5" fill="#ffffff" />
+            
+            {/* Body stripe */}
+            <path d="M40,58 L60,58" stroke="#030404" strokeWidth="2.5" />
+          </svg>
         </div>
       </div>
     </div>
@@ -877,7 +960,7 @@ export default function Home() {
             <img
               src="/hero section/new_logo2.png"
               alt="Aarambh New Logo"
-              className="w-full h-auto max-h-[45vh] md:max-h-[55vh] object-contain select-none"
+              className="relative z-10 w-full h-auto max-h-[45vh] md:max-h-[55vh] object-contain select-none"
               draggable={false}
             />
 
