@@ -463,7 +463,187 @@ const col2Images = PHOTOS.slice(16, 32).map(p => p.src);
 const col3Images = PHOTOS.slice(32, 48).map(p => p.src);
 const col4Images = PHOTOS.slice(48, 64).map(p => p.src);
 
+interface SmokeParticle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  alpha: number;
+  color: string;
+  vx: number;
+  vy: number;
+}
 
+function RocketOrbit() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [angle, setAngle] = useState(0);
+  const [smoke, setSmoke] = useState<SmokeParticle[]>([]);
+  const requestRef = useRef<number | null>(null);
+  const prevTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const parent = containerRef.current.parentElement;
+    if (!parent) return;
+
+    const updateDimensions = () => {
+      setDimensions({
+        width: parent.offsetWidth,
+        height: parent.offsetHeight,
+      });
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+
+    // Initial delay to let the layout settle
+    const timer = setTimeout(updateDimensions, 200);
+
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const animate = (time: number) => {
+    if (prevTimeRef.current !== null) {
+      const delta = (time - prevTimeRef.current) * 0.001; // seconds
+
+      // Revolve speed: 1 full rotation every 5.5 seconds
+      const speed = 1.14; // rad per second
+      setAngle((prev) => (prev + speed * delta) % (2 * Math.PI));
+
+      // Update smoke particles
+      setSmoke((prev) =>
+        prev
+          .map((p) => ({
+            ...p,
+            x: p.x + p.vx * delta,
+            y: p.y + p.vy * delta,
+            size: p.size + 15 * delta, // smoke expands
+            alpha: p.alpha - 0.7 * delta, // smoke fades
+          }))
+          .filter((p) => p.alpha > 0)
+      );
+    }
+    prevTimeRef.current = time;
+    requestRef.current = requestAnimationFrame(animate);
+  };
+
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+  }, []);
+
+  // Compute rocket position and heading
+  const rx = dimensions.width / 2;
+  const ry = dimensions.height / 2;
+  
+  // Orbit radius is slightly larger than the logo
+  const radiusX = dimensions.width * 0.58;
+  const radiusY = dimensions.height * 0.85;
+
+  const rocketX = rx + radiusX * Math.cos(angle);
+  const rocketY = ry + radiusY * Math.sin(angle);
+
+  // Tangent for heading angle
+  const tangentX = -radiusX * Math.sin(angle);
+  const tangentY = radiusY * Math.cos(angle);
+  const heading = Math.atan2(tangentY, tangentX);
+  const headingDegrees = (heading * 180) / Math.PI;
+
+  // Size of rocket (1/3 of logo height)
+  const rocketSize = Math.max(50, dimensions.height * 0.35);
+
+  // Spawn smoke particles at the rocket's tail
+  const lastSpawnRef = useRef<number>(0);
+  useEffect(() => {
+    const now = Date.now();
+    // Spawn particle every 45ms
+    if (now - lastSpawnRef.current > 45 && dimensions.width > 0) {
+      lastSpawnRef.current = now;
+
+      const offset = rocketSize / 2;
+      const tailX = rocketX - Math.cos(heading) * offset;
+      const tailY = rocketY - Math.sin(heading) * offset;
+
+      // Multiple shades of gray/orange/pink for smoke
+      const smokeColors = [
+        'rgba(240, 240, 240, 0.75)', // Light gray
+        'rgba(200, 200, 200, 0.65)', // Medium gray
+        'rgba(255, 154, 0, 0.6)',   // Accent orange fire
+        'rgba(255, 24, 140, 0.5)',   // Pink spark
+      ];
+      
+      const newParticle: SmokeParticle = {
+        id: Math.random() + now,
+        x: tailX,
+        y: tailY,
+        size: Math.random() * 8 + 6,
+        alpha: 0.8,
+        color: smokeColors[Math.floor(Math.random() * smokeColors.length)],
+        vx: -tangentX * 0.15 + (Math.random() - 0.5) * 15,
+        vy: -tangentY * 0.15 + (Math.random() - 0.5) * 15,
+      };
+
+      setSmoke((prev) => [...prev, newParticle]);
+    }
+  }, [angle, dimensions, rocketX, rocketY, heading, rocketSize]);
+
+  if (dimensions.width === 0) {
+    return <div ref={containerRef} className="absolute inset-0 pointer-events-none" />;
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      className="absolute inset-0 pointer-events-none z-30 overflow-visible"
+    >
+      {/* Smoke particles */}
+      {smoke.map((p) => (
+        <div
+          key={p.id}
+          className="absolute rounded-full filter blur-[1px]"
+          style={{
+            left: p.x,
+            top: p.y,
+            width: p.size,
+            height: p.size,
+            backgroundColor: p.color,
+            opacity: p.alpha,
+            transform: 'translate(-50%, -50%)',
+            transition: 'opacity 0.1s ease',
+          }}
+        />
+      ))}
+
+      {/* Rocket */}
+      <div
+        className="absolute transition-transform duration-75 ease-out"
+        style={{
+          left: rocketX,
+          top: rocketY,
+          width: rocketSize,
+          height: rocketSize,
+          transform: `translate(-50%, -50%) rotate(${headingDegrees + 90}deg)`,
+        }}
+      >
+        <div className="w-full h-full relative overflow-hidden rounded-full border border-brand-ink/15 shadow-md bg-brand-cloud">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero section/rocket.jfif"
+            alt="Rocket"
+            className="w-full h-full object-cover select-none mix-blend-multiply"
+            draggable={false}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const router = useRouter();
@@ -691,7 +871,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full max-w-lg md:max-w-2xl lg:max-w-3xl flex items-center justify-center"
+            className="relative w-full max-w-lg md:max-w-2xl lg:max-w-3xl flex items-center justify-center"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -700,6 +880,9 @@ export default function Home() {
               className="w-full h-auto max-h-[45vh] md:max-h-[55vh] object-contain select-none"
               draggable={false}
             />
+
+            {/* Revolving Rocket with Smoke trail */}
+            <RocketOrbit />
           </motion.div>
         </div>
 
